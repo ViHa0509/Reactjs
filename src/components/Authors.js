@@ -4,9 +4,86 @@ class Authors extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            authors: []
+            authors: [],
+            showForm: false,
+            firstname:'',
+            lastname:'',
+            email:'',
         }
     }
+    onChange = async (event) =>{
+        console.log('ON CHANGING VALUE')
+        var target = event.target;
+        var name = target.name;
+        var value = target.value;
+        await this.setState({
+            [name] : value
+        });
+        console.log(this.state)
+      }
+
+    renderForm() {
+        return (
+            <div> 
+                <form onSubmit={this.createAuthor}>  
+                    <div className="container">  
+                    <br />  
+                    <div className="form-group row">  
+                        <label className="col-sm-1 col-form-label" />  
+                        <div className="col-sm-4">  
+                            <h3>Create Author</h3>  
+                        </div>  
+                    </div>   
+                    <div className="form-group row">  
+                        <label className="col-sm-2 col-form-label">First Name:</label>  
+                        <div className="col-sm-4">  
+                        <input 
+                            type="text"  
+                            className="form-control" 
+                            placeholder="firstname"
+                            name="firstname"
+                            value={this.state.firstname}
+                            onChange={this.onChange}/>  
+                        </div>  
+                    </div>
+                    <div className="form-group row">  
+                        <label className="col-sm-2 col-form-label">Last Name:</label>  
+                        <div className="col-sm-4">  
+                        <input 
+                            type="text"  
+                            className="form-control" 
+                            placeholder="lastname"
+                            name="lastname"
+                            value={this.state.lastname}
+                            onChange={this.onChange}/> 
+                        </div>  
+                    </div>  
+                    <div className="form-group row">  
+                        <label className="col-sm-2 col-form-label">Email:</label>  
+                        <div className="col-sm-4">  
+                        <input 
+                            type="text"  
+                            className="form-control" 
+                            placeholder="email"
+                            name="email"
+                            value={this.state.email}
+                            onChange={this.onChange}/> 
+                        </div>  
+                    </div>  
+                    <div className="form-group row">  
+                        <label className="col-sm-1 col-form-label" />  
+                        <div className="col-sm-4">  
+                        <button type="submit" className="btn btn-success">Create</button>  
+                        </div>  
+                    </div>  
+                    </div>  
+                </form>
+           </div>
+        );
+      }
+     
+
+
     getAuthors =  async (data) => {
         console.log("ok")
         let url = 'http://127.0.0.1:8000/book/authors/';
@@ -31,19 +108,18 @@ class Authors extends Component{
             }
         }).catch((err)=>{
             console.log(err)
-            console.log("LOGIN FAIL, PLEASE TRY AGAIN")
+            console.log("Error")
         })
         
 
     }
 
     createAuthor =  async (data) => {
-        var first_name = 'vi'
-        var last_name = 'hoan'
-
-        var email = '123@gmail.com'
+        var first_name = data
+        var last_name = data
+        var email = data
         console.log("ok")
-        let url = 'http://127.0.0.1:8000/book/authors//';
+        let url = 'http://127.0.0.1:8000/book/authors/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
@@ -70,7 +146,7 @@ class Authors extends Component{
             }
         }).catch((err)=>{
             console.log(err)
-            console.log("LOGIN FAIL, PLEASE TRY AGAIN")
+            console.log("Create fail")
         })
         
 
@@ -130,7 +206,7 @@ class Authors extends Component{
             }
         }).catch((err)=>{
             console.log(err)
-            console.log("LOGIN FAIL, PLEASE TRY AGAIN")
+            console.log("Can't delete")
         })
         
     }
@@ -158,12 +234,17 @@ class Authors extends Component{
                         <td>{author.id}</td>
                         <td>{author.first_name}</td> 
                         <td>{author.last_name}</td>
-                        <td><button onClick={() => this.deleteAuthor(author)}>{author.email}</button></td>
+                        <td>{author.email}</td>
+                        <td><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button onClick={() => this.deleteAuthor(author)} type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button></td>
                     </tr>
                 ))}
                 </tbody>
                 </table>
-                <center><button className="btn btn-primary" onClick={this.createAuthor}>Add New Record</button></center>
+                <center><button className="btn btn-primary" onClick={() => this.setState({showForm: true})}>Add New Record</button></center>
+                <div>
+                    {this.state.showForm ? this.renderForm() : null}
+                </div>
         </div>
         );
     }
