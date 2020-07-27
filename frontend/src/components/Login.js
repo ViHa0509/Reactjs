@@ -4,8 +4,6 @@ class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isLogin : false,
-      token : '',
       username: '',
       password: '',
     }
@@ -22,8 +20,8 @@ class Login extends Component {
   }
 
   onLogin = (event) =>{
-	event.preventDefault();
-	console.log('ON LOGIN')
+    event.preventDefault();
+    this.props.onLogin(this.state)
 	
   }
 
