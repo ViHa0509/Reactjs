@@ -29,7 +29,7 @@ SECRET_KEY = 'sa=2%i#j+zqmbxmf4!8!+hctpa+we_t!%k197inf(kt*3d42e2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'books',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders'
     # 'rest_framework_jwt',
 ]
 
@@ -55,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'demo.urls'
@@ -147,3 +151,4 @@ import datetime
 #     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
  
 # }
+CORS_ORIGIN_ALLOW_ALL = True

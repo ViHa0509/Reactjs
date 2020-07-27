@@ -30,7 +30,7 @@ def login(request):
 
     token, _ = Token.objects.get_or_create(user=user)
     print(token.key)
-    return Response({"token": token.key})
+    return Response({"token": token.key, "user_id": user.id})
 
 
 # @api_view(['POST'])
