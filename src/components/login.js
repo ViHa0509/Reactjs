@@ -21,7 +21,7 @@ class Login extends Component{
     onLogin =  async (data) =>{
         var {username} = data;
         var {password} = data;
-        let url = 'http://127.0.0.1:8000/login/';
+        let url = 'http://10.0.0.61:8000/login/';
         let options = {
             method: 'POST',
             url : url,

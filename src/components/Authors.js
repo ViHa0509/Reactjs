@@ -6,11 +6,14 @@ class Authors extends Component{
         this.state = {
             authors: [],
             showForm: false,
-            firstname:'',
-            lastname:'',
-            email:'',
+            firstname: '',
+            lastname: '',
+            email: '',
         }
     }
+
+   
+
     onChange = async (event) =>{
         console.log('ON CHANGING VALUE')
         var target = event.target;
@@ -86,7 +89,7 @@ class Authors extends Component{
 
     getAuthors =  async (data) => {
         console.log("ok")
-        let url = 'http://127.0.0.1:8000/book/authors/';
+        let url = 'http://10.0.0.61:8000/book/authors/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
@@ -114,14 +117,12 @@ class Authors extends Component{
 
     }
 
-    createAuthor =  async (data) => {
-        var first_name = data
-        var last_name = data
-        var email = data
-        console.log("ok")
-        let url = 'http://127.0.0.1:8000/book/authors/';
+    createAuthor =  async (event) => {
+        event.preventDefault();
+        console.log("ok");
+        let url = 'http://10.0.0.61:8000/book/authors/';
         var token = 'Token ' + localStorage.getItem('token')
-        console.log(token)
+        console.log(this.state.firstname)
 
         let options = {
             method: 'POST',
@@ -132,9 +133,9 @@ class Authors extends Component{
                 'Authorization': token
             },
             data: {
-                first_name: first_name,
-                last_name: last_name,
-                email: email
+                first_name: this.state.firstname,
+                last_name: this.state.lastname,
+                email: this.state.email
             },
             credentials: "same-origin",
         };
@@ -153,7 +154,7 @@ class Authors extends Component{
     }
 
     updateAuthor = async (author) => {
-        let url = 'http://127.0.0.1:8000/book/authors/' + author.id + '/';
+        let url = 'http://10.0.0.61:8000/book/authors/' + author.id + '/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
@@ -184,7 +185,7 @@ class Authors extends Component{
     }
 
     deleteAuthor = async (author) => {
-        let url = 'http://127.0.0.1:8000/book/authors/' + author.id + '/';
+        let url = 'http://10.0.0.61:8000/book/authors/' + author.id + '/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
