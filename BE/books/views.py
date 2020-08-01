@@ -17,7 +17,7 @@ class AuthorViewset(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-
+# class CheckToken()
 @api_view(['GET'])
 def private(request, format=None):
     return Response({
