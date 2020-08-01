@@ -1,5 +1,7 @@
 import axios  from 'axios';
 import React, {Component} from 'react';
+import {API_ENDPOINT} from '../const';
+
 class Authors extends Component{
     constructor(props) {
         super(props);
@@ -89,7 +91,7 @@ class Authors extends Component{
 
     getAuthors =  async (data) => {
         console.log("ok")
-        let url = 'http://10.0.0.61:8000/book/authors/';
+        let url = API_ENDPOINT + 'book/authors/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
@@ -120,7 +122,7 @@ class Authors extends Component{
     createAuthor =  async (event) => {
         event.preventDefault();
         console.log("ok");
-        let url = 'http://10.0.0.61:8000/book/authors/';
+        let url = API_ENDPOINT +'book/authors/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(this.state.firstname)
 
@@ -154,7 +156,7 @@ class Authors extends Component{
     }
 
     updateAuthor = async (author) => {
-        let url = 'http://10.0.0.61:8000/book/authors/' + author.id + '/';
+        let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
@@ -185,7 +187,7 @@ class Authors extends Component{
     }
 
     deleteAuthor = async (author) => {
-        let url = 'http://10.0.0.61:8000/book/authors/' + author.id + '/';
+        let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
         var token = 'Token ' + localStorage.getItem('token')
         console.log(token)
 
