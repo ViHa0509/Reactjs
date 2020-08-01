@@ -29,7 +29,7 @@ SECRET_KEY = 'sa=2%i#j+zqmbxmf4!8!+hctpa+we_t!%k197inf(kt*3d42e2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,8 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'books',
     'rest_framework',
-    # 'rest_framework.authtoken',
-    # 'rest_framework_jwt',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +54,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'demo.urls'
@@ -83,12 +85,8 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'django_orm',
-        'USER' : 'root',
-        'PASSWORD' :'vihc05091998',
-        'PORT' :'3306',
-        'HOST' :'localhost',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 
@@ -163,7 +161,6 @@ public_openssh = public_key.public_bytes(
     encoding=serialization.Encoding.OpenSSH,
     format=serialization.PublicFormat.OpenSSH
 )
- 
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -190,3 +187,4 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+CORS_ORIGIN_ALLOW_ALL = True

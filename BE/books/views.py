@@ -17,19 +17,6 @@ class AuthorViewset(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-# @api_view(['POST'])
-# @permission_classes([AllowAny, ])
-# def login(request):
-#     username = request.data['username']
-#     password = request.data['password']
-
-#     user = authenticate(username=username, password=password)
-#     print(user)
-#     if not user:
-#         return Response({"error": "Login failed"}, status=HTTP_401_UNAUTHORIZED)
-#     token, _ = Token.objects.get_or_create(user=user)
-#     print(token.key)
-#     return Response({"token": token.key})
 
 @api_view(['GET'])
 def private(request, format=None):
