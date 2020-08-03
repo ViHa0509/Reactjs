@@ -1,6 +1,9 @@
-import axios  from 'axios';
+// import axios  from 'axios';
 import React, {Component} from 'react';
-import {API_ENDPOINT} from '../const';
+// import {API_ENDPOINT} from '../const';
+import AuthorForm from './AuthorForm';
+
+import './Authors.css'
 
 class Authors extends Component{
     constructor(props) {
@@ -8,13 +11,23 @@ class Authors extends Component{
         this.state = {
             authors: [],
             showForm: false,
-            firstname: '',
-            lastname: '',
-            email: '',
+            selectedAuthor: {
+            'firstname': '',
+            'lastname': '',
+            'email': '',
+            'id': ''
+            }
         }
     }
 
-   
+   componentWillReceiveProps = (nextProps) =>{
+       if(nextProps.authors !== this.state.authors){
+           this.setState({
+               authors: nextProps.authors,
+               showForm: false
+           });
+       }
+   }
 
     onChange = async (event) =>{
         console.log('ON CHANGING VALUE')
@@ -24,200 +37,149 @@ class Authors extends Component{
         await this.setState({
             [name] : value
         });
-        console.log(this.state)
       }
 
-    renderForm() {
-        return (
-            <div> 
-                <form onSubmit={this.createAuthor}>  
-                    <div className="container">  
-                    <br />  
-                    <div className="form-group row">  
-                        <label className="col-sm-1 col-form-label" />  
-                        <div className="col-sm-4">  
-                            <h3>Create Author</h3>  
-                        </div>  
-                    </div>   
-                    <div className="form-group row">  
-                        <label className="col-sm-2 col-form-label">First Name:</label>  
-                        <div className="col-sm-4">  
-                        <input 
-                            type="text"  
-                            className="form-control" 
-                            placeholder="firstname"
-                            name="firstname"
-                            value={this.state.firstname}
-                            onChange={this.onChange}/>  
-                        </div>  
-                    </div>
-                    <div className="form-group row">  
-                        <label className="col-sm-2 col-form-label">Last Name:</label>  
-                        <div className="col-sm-4">  
-                        <input 
-                            type="text"  
-                            className="form-control" 
-                            placeholder="lastname"
-                            name="lastname"
-                            value={this.state.lastname}
-                            onChange={this.onChange}/> 
-                        </div>  
-                    </div>  
-                    <div className="form-group row">  
-                        <label className="col-sm-2 col-form-label">Email:</label>  
-                        <div className="col-sm-4">  
-                        <input 
-                            type="text"  
-                            className="form-control" 
-                            placeholder="email"
-                            name="email"
-                            value={this.state.email}
-                            onChange={this.onChange}/> 
-                        </div>  
-                    </div>  
-                    <div className="form-group row">  
-                        <label className="col-sm-1 col-form-label" />  
-                        <div className="col-sm-4">  
-                        <button type="submit" className="btn btn-success">Create</button>  
-                        </div>  
-                    </div>  
-                    </div>  
-                </form>
-           </div>
-        );
-      }
-     
 
+    onGetAuthors = () =>{
+        this.props.onGetAuthors();
+    }
 
-    getAuthors =  async (data) => {
-        console.log("ok")
-        let url = API_ENDPOINT + 'book/authors/';
-        var token = 'Token ' + localStorage.getItem('token')
-        console.log(token)
+    // onCreateAuthor = (event) =>{
+    //     event.preventDefault();
+    //     this.props.onCreateAuthor(this.state);
+    // }
 
-        let options = {
-            method: 'GET',
-            url : url,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            credentials: "same-origin",
-        };
+    onDeleteAuthor = (id) =>{
+        this.props.onDeleteAuthor(id);
+    }
 
-        await axios({...options}).then((res)=>{
-            if (res.data) {
-              console.log(res.data);
-              this.setState({authors: res.data});
+    onEditAuthor = async(author) =>{
+        console.log("ON EDITING AUTHOR")
+        await this.setState({
+            showForm: true,
+            selectedAuthor:{
+                firstname: author.first_name,
+                lastname: author.last_name,
+                email: author.email,
+                id: author.id
             }
-        }).catch((err)=>{
-            console.log(err)
-            console.log("Error")
-        })
-        
+        });
+
 
     }
 
-    createAuthor =  async (event) => {
-        event.preventDefault();
-        console.log("ok");
-        let url = API_ENDPOINT +'book/authors/';
-        var token = 'Token ' + localStorage.getItem('token')
-        console.log(this.state.firstname)
-
-        let options = {
-            method: 'POST',
-            url : url,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            data: {
-                first_name: this.state.firstname,
-                last_name: this.state.lastname,
-                email: this.state.email
-            },
-            credentials: "same-origin",
-        };
-
-        await axios({...options}).then((res)=>{
-            if (res.data) {
-              console.log(res.data);
-              //this.setState({authors: res.data});
+    onToggleForm = () =>{
+        this.setState({
+            showForm: !this.state.showForm,
+            selectedAuthor:{
+                'firstname': '',
+                'lastname': '',
+                'email': '',
+                'id': ''
             }
-        }).catch((err)=>{
-            console.log(err)
-            console.log("Create fail")
-        })
-        
 
+        })
     }
 
-    updateAuthor = async (author) => {
-        let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
-        var token = 'Token ' + localStorage.getItem('token')
-        console.log(token)
+    // createAuthor =  async (event) => {
+    //     event.preventDefault();
+    //     console.log("ok");
+    //     let url = API_ENDPOINT +'book/authors/';
+    //     var token = 'Token ' + localStorage.getItem('token')
+    //     console.log(this.state.firstname)
 
-        let options = {
-            method: 'PATCH',
-            url : url,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            data: {
-                first_name: 'hello',
-            },
-            credentials: "same-origin",
-        };
+    //     let options = {
+    //         method: 'POST',
+    //         url : url,
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             'Authorization': token
+    //         },
+    //         data: {
+    //             first_name: this.state.firstname,
+    //             last_name: this.state.lastname,
+    //             email: this.state.email
+    //         },
+    //         credentials: "same-origin",
+    //     };
 
-        await axios({...options}).then((res)=>{
-            if (res.data) {
-              console.log(res.data);
-              //this.setState({authors: res.data});
-            }
-        }).catch((err)=>{
-            console.log(err)
-            console.log("LOGIN FAIL, PLEASE TRY AGAIN")
-        })
+    //     await axios({...options}).then((res)=>{
+    //         if (res.data) {
+    //           console.log(res.data);
+    //           //this.setState({authors: res.data});
+    //         }
+    //     }).catch((err)=>{
+    //         console.log(err)
+    //         console.log("Create fail")
+    //     })
         
-    }
 
-    deleteAuthor = async (author) => {
-        let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
-        var token = 'Token ' + localStorage.getItem('token')
-        console.log(token)
+    // }
 
-        let options = {
-            method: 'DELETE',
-            url : url,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            credentials: "same-origin",
-        };
+    // updateAuthor = async (author) => {
+    //     let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
+    //     var token = 'Token ' + localStorage.getItem('token')
+    //     console.log(token)
 
-        await axios({...options}).then((res)=>{
-            if (res.data) {
-              console.log(res.data);
-              //this.setState({authors: res.data});
-            }
-        }).catch((err)=>{
-            console.log(err)
-            console.log("Can't delete")
-        })
+    //     let options = {
+    //         method: 'PATCH',
+    //         url : url,
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             'Authorization': token
+    //         },
+    //         data: {
+    //             first_name: 'hello',
+    //         },
+    //         credentials: "same-origin",
+    //     };
+
+    //     await axios({...options}).then((res)=>{
+    //         if (res.data) {
+    //           console.log(res.data);
+    //           //this.setState({authors: res.data});
+    //         }
+    //     }).catch((err)=>{
+    //         console.log(err)
+    //         console.log("LOGIN FAIL, PLEASE TRY AGAIN")
+    //     })
         
-    }
+    // }
+
+    // deleteAuthor = async (author) => {
+    //     let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
+    //     var token = 'Token ' + localStorage.getItem('token')
+    //     console.log(token)
+
+    //     let options = {
+    //         method: 'DELETE',
+    //         url : url,
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             'Authorization': token
+    //         },
+    //         credentials: "same-origin",
+    //     };
+
+    //     await axios({...options}).then((res)=>{
+    //         if (res.data) {
+    //           console.log(res.data);
+    //           //this.setState({authors: res.data});
+    //         }
+    //     }).catch((err)=>{
+    //         console.log(err)
+    //         console.log("Can't delete")
+    //     })
+        
+    // }
 
     componentDidMount =() =>{
-        this.getAuthors();
+        this.onGetAuthors();
     }
-    
+        
     render(){
         return(
             <div>
@@ -233,20 +195,46 @@ class Authors extends Component{
                 </thead>
                 <tbody>
                 {this.state.authors.map((author, index) => (
-                    <tr>
+                    <tr className="white-text" key={index}>
                         <td>{author.id}</td>
                         <td>{author.first_name}</td> 
                         <td>{author.last_name}</td>
                         <td>{author.email}</td>
-                        <td><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span></button>
-                        <button onClick={() => this.deleteAuthor(author)} type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button></td>
+                        <td>
+                            <div className="icon-div">
+                                <button 
+                                    type="button" 
+                                    className="btn btn-info"
+                                    onClick={()=>{
+                                        this.onEditAuthor(author)
+                                    }}>
+                                    <i className="fa fa-edit"></i>
+                                </button>
+                                <button 
+                                    onClick={() => {
+                                        this.onDeleteAuthor(author.id)
+                                    }} 
+                                    type="button" 
+                                    className="btn btn-danger">
+                                    <i className="fa fa-trash"></i>
+                                </button>
+                            </div>
+                           
+                        </td>
                     </tr>
                 ))}
                 </tbody>
                 </table>
-                <center><button className="btn btn-primary" onClick={() => this.setState({showForm: true})}>Add New Record</button></center>
+                <center><button className="btn btn-primary" onClick={this.onToggleForm}>Add New Record</button></center>
                 <div>
-                    {this.state.showForm ? this.renderForm() : null}
+                    {
+                        this.state.showForm ? 
+                        <AuthorForm 
+                            onCreateAuthor={this.props.onCreateAuthor}
+                            selectedAuthor={this.state.selectedAuthor}
+                            /> : 
+                        null
+                    }
                 </div>
         </div>
         );

@@ -85,8 +85,7 @@ class Login extends Component {
                                             type="submit"
                                             value="Login"
                                             className="btn float-right login_btn" />
-                                            <button
-                                                onClick={this.onClick}>TESTING</button>
+                                            
                                     </div>
                                 </form>
                             </div>
