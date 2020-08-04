@@ -16,7 +16,8 @@ class App extends Component {
         super(props);
         this.state = {
             token: '',
-            authors: []
+            authors: [],
+            errorMessage : 'login fail',
         }
     }
 
@@ -63,6 +64,7 @@ class App extends Component {
         }
     }
 
+
     onLogin = async (data) => {
         var { username } = data;
         var { password } = data;
@@ -82,7 +84,8 @@ class App extends Component {
         };
 
         await axios({ ...options }).then((res) => {
-            if (res.data) {
+            if (res.data) 
+            {
                 var data = res.data
                 this.setState({
                     token: data.access,
@@ -93,9 +96,13 @@ class App extends Component {
                 history.push('/authors')
             }
         }).catch((err) => {
-            console.log(err);
+            console.log(err);          
+            window.confirm('Invalid username or password')
         })
     }
+
+    
+
     onGetAuthors = async () => {
         var token = sessionStorage.getItem('token');
         if (token) {
@@ -150,6 +157,7 @@ class App extends Component {
                         'email': email
                     }
                 };
+                
 
                 axios({...options}).then((res)=>{
                     console.log(res)
@@ -157,7 +165,8 @@ class App extends Component {
                         this.onGetAuthors();
                     }
                 }).catch((err)=>{
-                    console.log(err)
+                    console.log(err);              
+                    window.confirm('Email Existed!')
                 })
             }
             else {
@@ -182,7 +191,8 @@ class App extends Component {
                         this.onGetAuthors();
                     }
                 }).catch((err) => {
-                    console.log(err)
+                    console.log(err);
+                    window.confirm('Email Existed!')
                 })
 
             }
@@ -206,6 +216,7 @@ class App extends Component {
                 credentials: "same-origin"
             }
             await axios({ ...options }).then((res) => {
+
                 if (res && res.status === 204) {
                     this.onGetAuthors();
                 }

@@ -6,15 +6,13 @@ class Login extends Component {
         super(props);
         this.state = {
             username: '',
-            password: '',
+            password: '',   
         }
     }
 
     // componentDidMount =() =>{
     //     var token = this.localStorage.getItem()
     // }
-
-  
 
     onChange = async (event) =>{
         console.log('ON CHANGING VALUE')
@@ -45,11 +43,6 @@ class Login extends Component {
                         <div className="card">
                             <div className="card-header">
                                 <h3>Sign In</h3>
-                                {/* <div className="d-flex justify-content-end social_icon">
-                <span><i className="fab fa-facebook-square"></i></span>
-                <span><i className="fab fa-google-plus-square"></i></span>
-                <span><i className="fab fa-twitter-square"></i></span>
-              </div> */}
                             </div>
                             <div className="card-body">
                                 <form onSubmit={this.onLogin}>
@@ -77,9 +70,10 @@ class Login extends Component {
                                             value={this.state.password}
                                             onChange={this.onChange} />
                                     </div>
+                                    <p>{ this.state.errorMessage}</p>
                                     <div className="row align-items-center remember">
                                         <input type="checkbox" />Remember Me
-                </div>
+                                    </div>
                                     <div className="form-group">
                                         <input
                                             type="submit"

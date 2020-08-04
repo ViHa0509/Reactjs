@@ -1,17 +1,17 @@
-.white-text{
-    color: white;
+.white-text {
+    color: black;
 }
 
-.icon-div{
+.icon-div {
     text-align: center;
 }
 
-.add-author{
+.add-author {
     border-style: solid;
     width: 700px;
     margin: auto;
 }
 
-.custom-button{
+.custom-button {
     width: 160px;
 }

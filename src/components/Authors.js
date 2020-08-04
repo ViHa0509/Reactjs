@@ -81,100 +81,6 @@ class Authors extends Component{
         })
     }
 
-    // createAuthor =  async (event) => {
-    //     event.preventDefault();
-    //     console.log("ok");
-    //     let url = API_ENDPOINT +'book/authors/';
-    //     var token = 'Token ' + localStorage.getItem('token')
-    //     console.log(this.state.firstname)
-
-    //     let options = {
-    //         method: 'POST',
-    //         url : url,
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'Authorization': token
-    //         },
-    //         data: {
-    //             first_name: this.state.firstname,
-    //             last_name: this.state.lastname,
-    //             email: this.state.email
-    //         },
-    //         credentials: "same-origin",
-    //     };
-
-    //     await axios({...options}).then((res)=>{
-    //         if (res.data) {
-    //           console.log(res.data);
-    //           //this.setState({authors: res.data});
-    //         }
-    //     }).catch((err)=>{
-    //         console.log(err)
-    //         console.log("Create fail")
-    //     })
-        
-
-    // }
-
-    // updateAuthor = async (author) => {
-    //     let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
-    //     var token = 'Token ' + localStorage.getItem('token')
-    //     console.log(token)
-
-    //     let options = {
-    //         method: 'PATCH',
-    //         url : url,
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'Authorization': token
-    //         },
-    //         data: {
-    //             first_name: 'hello',
-    //         },
-    //         credentials: "same-origin",
-    //     };
-
-    //     await axios({...options}).then((res)=>{
-    //         if (res.data) {
-    //           console.log(res.data);
-    //           //this.setState({authors: res.data});
-    //         }
-    //     }).catch((err)=>{
-    //         console.log(err)
-    //         console.log("LOGIN FAIL, PLEASE TRY AGAIN")
-    //     })
-        
-    // }
-
-    // deleteAuthor = async (author) => {
-    //     let url = API_ENDPOINT + 'book/authors/' + author.id + '/';
-    //     var token = 'Token ' + localStorage.getItem('token')
-    //     console.log(token)
-
-    //     let options = {
-    //         method: 'DELETE',
-    //         url : url,
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'Authorization': token
-    //         },
-    //         credentials: "same-origin",
-    //     };
-
-    //     await axios({...options}).then((res)=>{
-    //         if (res.data) {
-    //           console.log(res.data);
-    //           //this.setState({authors: res.data});
-    //         }
-    //     }).catch((err)=>{
-    //         console.log(err)
-    //         console.log("Can't delete")
-    //     })
-        
-    // }
 
     componentDidMount =() =>{
         this.onGetAuthors();
@@ -212,6 +118,7 @@ class Authors extends Component{
                                 </button>
                                 <button 
                                     onClick={() => {
+                                        if (window.confirm('Are you sure you wish to delete this item?'))   
                                         this.onDeleteAuthor(author.id)
                                     }} 
                                     type="button" 

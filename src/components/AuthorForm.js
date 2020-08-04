@@ -98,7 +98,7 @@ class AuthorForm extends Component {
                             <label className="col-sm-3 col-form-label">Email:</label>
                             <div className="col-sm-9">
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="form-control"
                                     placeholder="email"
                                     name="email"
