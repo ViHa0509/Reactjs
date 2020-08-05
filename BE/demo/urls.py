@@ -20,6 +20,6 @@ from books import urls, views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('book/', include('books.urls')),
-    path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', views.UserLoginView.as_view(), name='login'),
     path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
 ]
