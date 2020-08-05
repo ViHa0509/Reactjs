@@ -81,6 +81,11 @@ class Authors extends Component{
         })
     }
 
+    onLogout = () =>{
+        console.log("asdasdasdasdas")
+        sessionStorage.removeItem('token');
+        window.location.reload()
+    }
 
     componentDidMount =() =>{
         this.onGetAuthors();
@@ -143,7 +148,8 @@ class Authors extends Component{
                         null
                     }
                 </div>
-        </div>
+                <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
+            </div>
         );
     }
 }

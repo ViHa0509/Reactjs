@@ -8,9 +8,34 @@ class AuthorForm extends Component {
             id: '',
             firstname: '',
             lastname: '',
-            email: ''
+            email: '',
+            errors: ''
         }
     }
+
+    checkvalidmail(email){
+        var check, position, count;
+        check = true;
+        position = email.indexOf('com');
+        count = email.slice(position);
+        if (position < 0 || count.length > 3) 
+            check = false; 
+        return check;
+    }
+
+    handleValidation(){
+        let email = this.state.email;
+        let emailIsValid = true;
+        if(this.checkvalidmail(email) === false)
+        {
+            emailIsValid = false;
+            // errors = 'Invalid email';      
+        }
+        // this.setState({errors:errors});
+        return emailIsValid;
+    }
+
+
     onChange = async (event) =>{
         console.log('ON CHANGING VALUE')
         var target = event.target;
@@ -51,7 +76,11 @@ class AuthorForm extends Component {
 
     onCreateAuthor = (event) =>{
         event.preventDefault();
-        this.props.onCreateAuthor(this.state);
+        if(this.handleValidation()){
+            this.props.onCreateAuthor(this.state);
+         }else{
+            window.confirm('Invalid email');
+         }
     }
 
 

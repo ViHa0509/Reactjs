@@ -17,7 +17,6 @@ class App extends Component {
         this.state = {
             token: '',
             authors: [],
-            errorMessage : 'login fail',
         }
     }
 
@@ -101,7 +100,6 @@ class App extends Component {
         })
     }
 
-    
 
     onGetAuthors = async () => {
         var token = sessionStorage.getItem('token');
@@ -227,9 +225,11 @@ class App extends Component {
         }
     }
 
-    onEditAuthor = (data) => {
-        // console.log("ON EDIT ID= ", data);
-    }
+    // onEditAuthor = (data) => {
+    //     // console.log("ON EDIT ID= ", data);
+    // }
+
+    
 
     render() {
         return (
