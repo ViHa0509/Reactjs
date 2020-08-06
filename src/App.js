@@ -17,12 +17,14 @@ class App extends Component {
         this.state = {
             token: '',
             authors: [],
+            role:'',
         }
     }
 
 
     checkValidToken = async () => {
         var token = sessionStorage.getItem('token');
+        
         // console.log(token)
         var isValid = false;
         if (token) {
@@ -88,10 +90,12 @@ class App extends Component {
                 var data = res.data
                 this.setState({
                     token: data.access,
+                    role:data.role,
                     isLogin: true
                 });
 
                 sessionStorage.setItem('token', this.state.token);
+                sessionStorage.setItem('role', this.state.role);
                 history.push('/authors')
             }
         }).catch((err) => {
@@ -134,9 +138,11 @@ class App extends Component {
         }
     }
 
+
     onCreateAuthor = (data) => {
         console.log(data);
         var token = sessionStorage.getItem('token');
+        var role = sessionStorage.getItem('role');
         if (token) {
             if (data.id !== '') {
                 console.log("UPDATING AUTHOR IN APP ");
@@ -168,30 +174,38 @@ class App extends Component {
                 })
             }
             else {
-                console.log("CREATE NEW AUTHOR IN APP")
-                let { firstname, lastname, email } = data;
-                let url = API_ENDPOINT + 'book/authors/';
-                let options = {
-                    method: 'POST',
-                    url: url,
-                    header: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    },
-                    data: {
-                        'first_name': firstname,
-                        'last_name': lastname,
-                        'email': email
-                    }
-                };
-                axios({ ...options }).then((res) => {
-                    if (res && res.status === 201) {
-                        this.onGetAuthors();
-                    }
-                }).catch((err) => {
-                    console.log(err);
-                    window.confirm('Email Existed!')
-                })
+                if(role=='admin')
+                {
+                    console.log("CREATE NEW AUTHOR IN APP")
+                    let { firstname, lastname, email } = data;
+                    let url = API_ENDPOINT + 'book/authors/';
+                    let options = {
+                        method: 'POST',
+                        url: url,
+                        header: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            'first_name': firstname,
+                            'last_name': lastname,
+                            'email': email
+                        }
+                    };
+                    axios({ ...options }).then((res) => {
+                        if (res && res.status === 201) {
+                            this.onGetAuthors();
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                        window.confirm('Email Existed!')
+                    })
+                }
+                else
+                {
+                    window.confirm('You dont have permission to create');
+                    this.onGetAuthors();
+                }
 
             }
         }
@@ -201,26 +215,37 @@ class App extends Component {
     onDeleteAuthor = async (data) => {
         // console.log("ON DELETE ID= ", data);
         var token = sessionStorage.getItem('token');
+        var role = sessionStorage.getItem('role');
         if (token) {
-            var id = data;
-            var url = API_ENDPOINT + 'book/authors/' + id + "/";
-            var options = {
-                method: 'DELETE',
-                url: url,
-                header: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                credentials: "same-origin"
-            }
-            await axios({ ...options }).then((res) => {
+            if(role == 'admin')
+            {
+                if (window.confirm('Are you sure you wish to delete this item?'))
+                {
+                    var id = data;
+                    var url = API_ENDPOINT + 'book/authors/' + id + "/";
+                    var options = {
+                        method: 'DELETE',
+                        url: url,
+                        header: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: "same-origin"
+                    }
+                    await axios({ ...options }).then((res) => {
 
-                if (res && res.status === 204) {
-                    this.onGetAuthors();
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+                        if (res && res.status === 204) {
+                            this.onGetAuthors();
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }           
+            }
+            else {
+                window.confirm('You dont have permission to delete');
+                this.onGetAuthors();
+            }
 
         }
     }

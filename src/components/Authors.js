@@ -69,16 +69,23 @@ class Authors extends Component{
     }
 
     onToggleForm = () =>{
-        this.setState({
-            showForm: !this.state.showForm,
-            selectedAuthor:{
-                'firstname': '',
-                'lastname': '',
-                'email': '',
-                'id': ''
-            }
-
-        })
+        var role = sessionStorage.getItem('role');
+        if(role == 'user')
+        {
+            window.confirm('You dont have permission to create');
+        }
+        else{
+            this.setState({
+                showForm: !this.state.showForm,
+                selectedAuthor:{
+                    'firstname': '',
+                    'lastname': '',
+                    'email': '',
+                    'id': ''
+                }
+    
+            })
+        }
     }
 
     onLogout = () =>{
@@ -91,6 +98,7 @@ class Authors extends Component{
         this.onGetAuthors();
     }
         
+
     render(){
         return(
             <div>
@@ -122,8 +130,7 @@ class Authors extends Component{
                                     <i className="fa fa-edit"></i>
                                 </button>
                                 <button 
-                                    onClick={() => {
-                                        if (window.confirm('Are you sure you wish to delete this item?'))   
+                                    onClick={() => {   
                                         this.onDeleteAuthor(author.id)
                                     }} 
                                     type="button" 
