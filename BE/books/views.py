@@ -28,13 +28,24 @@ class UserLoginView(APIView):
         print("=====================")
         if user:
             refresh = TokenObtainPairSerializer.get_token(user)
-            datatoken = {
-                'refresh_token': str(refresh),
-                'access_token': str(refresh.access_token),
-                'access_expires': int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds()),
-                'refresh_expires': int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds()),
-                # 'permissions' : user.
-            }
+            check = user.is_superuser
+            if check == False:
+                datatoken = {
+                    'refresh_token': str(refresh),
+                    'access_token': str(refresh.access_token),
+                    'access_expires': int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds()),
+                    'refresh_expires': int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds()),
+                    'role' : 'user'
+                }
+    
+            else:
+                datatoken = {
+                    'refresh_token': str(refresh),
+                    'access_token': str(refresh.access_token),
+                    'access_expires': int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds()),
+                    'refresh_expires': int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds()),
+                    'role' : 'admin'
+                }
             return Response(datatoken, status=status.HTTP_200_OK)       
 
         return Response({
