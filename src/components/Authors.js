@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 // import {API_ENDPOINT} from '../const';
 import AuthorForm from './AuthorForm';
+import { customStyles } from '../components/utils/CustomModal';
+import Modal from 'react-modal';
 
 import './Authors.css'
 
@@ -15,8 +17,9 @@ class Authors extends Component{
             'firstname': '',
             'lastname': '',
             'email': '',
-            'id': ''
-            }
+            'id': '',
+            },
+            modalIsOpen: false
         }
     }
 
@@ -72,7 +75,7 @@ class Authors extends Component{
         var role = sessionStorage.getItem('role');
         if(role == 'user')
         {
-            window.confirm('You dont have permission to create');
+            this.setState({ modalIsOpen: true });
         }
         else{
             this.setState({
@@ -97,6 +100,26 @@ class Authors extends Component{
     componentDidMount =() =>{
         this.onGetAuthors();
     }
+
+    closeModal = () => {
+        this.setState({ modalIsOpen: false });
+    }
+
+    // renderUser = (data) => {
+    //     const userId = 1;
+    //     console.log('data',data)
+    //     return data && data.map(item => {
+    //         if (item.id === userId) {
+    //             return (
+    //                 <div>
+    //                     <div>{item.id}</div>
+    //                     <div>{item.first_name}</div>
+    //                 </div>
+    //             );
+    //         }
+    //     })
+       
+    // }
         
 
     render(){
@@ -113,6 +136,7 @@ class Authors extends Component{
                     </tr>
                 </thead>
                 <tbody>
+
                 {this.state.authors.map((author, index) => (
                     <tr className="white-text" key={index}>
                         <td>{author.id}</td>
@@ -156,6 +180,21 @@ class Authors extends Component{
                     }
                 </div>
                 <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
+                <div>
+                {/* {
+                    this.renderUser(this.state.authors)
+                } */}
+                </div>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    // onAfterOpen={afterOpenModal}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                    >
+                    <div className="error-message">You dont have permission to create</div>
+                    <button className="btn-close" onClick={this.closeModal}>Close</button>
+                </Modal>
             </div>
         );
     }

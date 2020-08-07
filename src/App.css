@@ -85,3 +85,19 @@ input:focus {
 .links a {
     margin-left: 4px;
 } */
+
+.error-message {
+    padding: 40px 20px 20px;
+    color: #5e7785;
+    font-size: 14px;
+}
+
+.btn-close {
+    padding: 7px 14px;
+    color: #5e7785;
+    border: 1px solid #d8dce6;
+    background: linear-gradient(0deg, #f6f7f9, #fff);
+    font-size: 13px;
+    margin-top: 30px;
+    cursor: pointer;
+}

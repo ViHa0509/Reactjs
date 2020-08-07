@@ -8,6 +8,8 @@ import { createBrowserHistory } from 'history';
 // import history from './history';
 import axios from 'axios';
 import { API_ENDPOINT } from './const';
+import Modal from 'react-modal';
+import { customStyles } from './components/utils/CustomModal';
 
 const history = createBrowserHistory();
 
@@ -18,6 +20,8 @@ class App extends Component {
             token: '',
             authors: [],
             role:'',
+            isLogin: false,
+            modalIsOpen: false
         }
     }
 
@@ -54,10 +58,9 @@ class App extends Component {
     }
 
     componentDidMount = async () => {
-        var { isLogin } = this.state;
-        isLogin = await this.checkValidToken()
-        if (isLogin === true) {
-            await this.setState({ isLogin })
+        let isCheckvalid = await this.checkValidToken()
+        if (isCheckvalid === true) {
+            await this.setState({ isLogin: isCheckvalid })
             history.push('/authors');
         }
         else {
@@ -85,12 +88,13 @@ class App extends Component {
         };
 
         await axios({ ...options }).then((res) => {
+
             if (res.data) 
             {
-                var data = res.data
+                var data = res.data;
                 this.setState({
-                    token: data.access,
-                    role:data.role,
+                    token: data.access_token,
+                    role: data.role,
                     isLogin: true
                 });
 
@@ -102,6 +106,10 @@ class App extends Component {
             console.log(err);          
             window.confirm('Invalid username or password')
         })
+    }
+
+    closeModal = () => {
+        this.setState({ modalIsOpen: false });
     }
 
 
@@ -143,8 +151,9 @@ class App extends Component {
         console.log(data);
         var token = sessionStorage.getItem('token');
         var role = sessionStorage.getItem('role');
+        console.log('role', role)
         if (token) {
-            if (data.id !== '') {
+            if (data.id) {
                 console.log("UPDATING AUTHOR IN APP ");
                 let {firstname, lastname, email, id} = data;
                 let url = API_ENDPOINT + 'book/authors/' + id + '/';
@@ -243,8 +252,9 @@ class App extends Component {
                 }           
             }
             else {
-                window.confirm('You dont have permission to delete');
+                // window.confirm('You dont have permission to delete');
                 this.onGetAuthors();
+                this.setState({ modalIsOpen: true });
             }
 
         }
@@ -280,6 +290,16 @@ class App extends Component {
                         )} />
                     <Redirect to="/login" from="/" />
                 </Switch>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    // onAfterOpen={afterOpenModal}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                    >
+                    <div className="error-message">You dont have permission to create</div>
+                    <button className="btn-close" onClick={this.closeModal}>Close</button>
+                </Modal>
             </Router>
 
         );
