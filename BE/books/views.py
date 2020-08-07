@@ -10,11 +10,15 @@ from django.contrib.auth import authenticate
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from rest_framework import status
 from djangoModel import settings
+from rest_framework import permissions
+from books.permission import UserPermission
+
 
 class AuthorViewset(viewsets.ModelViewSet): 
-    ermission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+    permission_classes = (UserPermission,)
 
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
