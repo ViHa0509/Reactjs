@@ -1,0 +1,10 @@
+# /requirements.txt
+
+django
+djangorestframework
+djangorestframework-simplejwt
+flask
+python-dotenv
+python-jose
+flask-cors
+six
