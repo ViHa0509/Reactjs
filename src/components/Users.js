@@ -1,18 +1,20 @@
 // import axios  from 'axios';
 import React, {Component} from 'react';
 // import {API_ENDPOINT} from '../const';
-import AuthorForm from './AuthorForm';
+import UserForm from './UserForm';
 import { customStyles } from '../components/utils/CustomModal';
 import Modal from 'react-modal';
+
 import './Authors.css'
 
-class Authors extends Component{
+class Users extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            authors: [],
+            users: [],
             showForm: false,
-            selectedAuthor: {
+            selectedUSer: {
+            'username':'',
             'firstname': '',
             'lastname': '',
             'email': '',
@@ -23,9 +25,9 @@ class Authors extends Component{
     }
 
    componentWillReceiveProps = (nextProps) =>{
-       if(nextProps.authors !== this.state.authors){
+       if(nextProps.users !== this.state.users){
            this.setState({
-               authors: nextProps.authors,
+               users: nextProps.users,
                showForm: false
            });
        }
@@ -42,87 +44,79 @@ class Authors extends Component{
       }
 
 
-    onGetAuthors = () =>{
-        this.props.onGetAuthors();
+    onGetUsers = () =>{
+        this.props.onGetUsers();
     }
 
-    onDeleteAuthor = (id) =>{
-        this.props.onDeleteAuthor(id);
-    }
+    // onDeleteUser = (id) =>{
+    //     this.props.onDeleteUser(id);
+    // }
 
-    onEditAuthor = async(author) =>{
-        console.log("ON EDITING AUTHOR")
-        await this.setState({
-            showForm: true,
-            selectedAuthor:{
-                firstname: author.first_name,
-                lastname: author.last_name,
-                email: author.email,
-                id: author.id
-            }
-        });
+    // onEditUser = async(author) =>{
+    //     console.log("ON EDITING AUTHOR")
+    //     await this.setState({
+    //         showForm: true,
+    //         selectedAuthor:{
+    //             firstname: author.first_name,
+    //             lastname: author.last_name,
+    //             email: author.email,
+    //             id: author.id
+    //         }
+    //     });
 
 
-    }
+    // }
 
-    onToggleForm = () =>{
-        var role = sessionStorage.getItem('role');
-        if(role === 'user')
-        {
-            this.setState({ modalIsOpen: true });
-        }
-        else{
-            this.setState({
-                showForm: !this.state.showForm,
-                selectedAuthor:{
-                    'firstname': '',
-                    'lastname': '',
-                    'email': '',
-                    'id': ''
-                }
+    // onToggleForm = () =>{
+    //     var role = sessionStorage.getItem('role');
+    //     if(role === 'user')
+    //     {
+    //         this.setState({ modalIsOpen: true });
+    //     }
+    //     else{
+    //         this.setState({
+    //             showForm: !this.state.showForm,
+    //             selectedAuthor:{
+    //                 'username':'',
+    //                 'firstname': '',
+    //                 'lastname': '',
+    //                 'email': '',
+    //                 'id': ''
+    //             }
     
-            })
-        }
-    }
+    //         })
+    //     }
+    // }
 
     onLogout = () =>{
-        console.log("asdasdasdasdas")
+        // console.log("asdasdasdasdas")
         sessionStorage.removeItem('token');
         window.location.reload()
     }
 
     componentDidMount =() =>{
-        this.onGetAuthors();
+        this.onGetUsers();
     }
 
     closeModal = () => {
         this.setState({ modalIsOpen: false });
     }
-    
-    // onRedirectUser = () =>{
-    //     this.props.onRedirectUser()
-    // }
 
-    // // renderUser = (data) => {
-    // //     const userId = 1;
-    // //     console.log('data',data)
-    // //     return data && data.map(item => {
-    // //         if (item.id === userId) {
-    // //             return (
-    // //                 <div>
-    // //                     <div>{item.id}</div>
-    // //                     <div>{item.first_name}</div>
-    // //                 </div>
-    // //             );
-    // //         }
-    // //     })
+    // renderUser = (data) => {
+    //     const userId = 1;
+    //     console.log('data',data)
+    //     return data && data.map(item => {
+    //         if (item.id === userId) {
+    //             return (
+    //                 <div>
+    //                     <div>{item.id}</div>
+    //                     <div>{item.first_name}</div>
+    //                 </div>
+    //             );
+    //         }
+    //     })
        
-    // // }
-
-    onTest = () =>{
-        console.log("TEST")
-        this.props.onTest();
-    }
+    // }
         
 
     render(){
@@ -132,6 +126,7 @@ class Authors extends Component{
                 <thead className="thead-dark">
                     <tr>
                     <th>ID</th>
+                    <th>Username</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -140,26 +135,28 @@ class Authors extends Component{
                 </thead>
                 <tbody>
 
-                {this.state.authors.map((author, index) => (
+                {this.state.users.map((user, index) => (
                     <tr className="white-text" key={index}>
-                        <td>{author.id}</td>
-                        <td>{author.first_name}</td> 
-                        <td>{author.last_name}</td>
-                        <td>{author.email}</td>
+                        <td>{user.id}</td>
+                        <td>{user.username}</td>
+                        <td>{user.first_name}</td> 
+                        <td>{user.last_name}</td>
+                        <td>{user.email}</td>
                         <td>
                             <div className="icon-div">
                                 <button 
                                     type="button" 
                                     className="btn btn-info"
-                                    onClick={()=>{
-                                        this.onEditAuthor(author)
-                                    }}>
+                                    // onClick={()=>{
+                                    //     this.onEditAuthor(author)
+                                    // }}
+                                >
                                     <i className="fa fa-edit"></i>
                                 </button>
                                 <button 
-                                    onClick={() => {   
-                                        this.onDeleteAuthor(author.id)
-                                    }} 
+                                    // onClick={() => {   
+                                    //     this.onDeleteAuthor(author.id)
+                                    // }} 
                                     type="button" 
                                     className="btn btn-danger">
                                     <i className="fa fa-trash"></i>
@@ -171,8 +168,9 @@ class Authors extends Component{
                 ))}
                 </tbody>
                 </table>
-                <center><button className="btn btn-primary" onClick={this.onToggleForm}>Add New Record</button></center>
-                <div>
+                <center><button className="btn btn-primary" >Add New Record</button></center>
+                {/* onClick={this.onToggleForm} */}
+                {/* <div>
                     {
                         this.state.showForm ? 
                         <AuthorForm 
@@ -181,10 +179,12 @@ class Authors extends Component{
                             /> : 
                         null
                     }
-                </div>
+                </div> */}
                 <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
-                <div><center><button className="btn btn-primary" onClick={this.onTest}><i className="fa fa-user" aria-hidden="true"> user</i></button></center></div>
                 <div>
+                {/* {
+                    this.renderUser(this.state.authors)
+                } */}
                 </div>
                 <Modal
                     isOpen={this.state.modalIsOpen}
@@ -201,4 +201,4 @@ class Authors extends Component{
     }
 }
 
-export default Authors;
+export default Users;

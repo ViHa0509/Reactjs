@@ -3,6 +3,7 @@ import './App.css';
 import { Route, Switch, Redirect, Router } from "react-router-dom";
 import Login from './components/Login';
 import Authors from './components/Authors';
+import Users from './components/Users';
 // import {PrivateRoute} from './PrivateRoute';
 import { createBrowserHistory } from 'history';
 // import history from './history';
@@ -19,6 +20,7 @@ class App extends Component {
         this.state = {
             token: '',
             authors: [],
+            users:[],
             role:'',
             isLogin: false,
             modalIsOpen: false
@@ -100,6 +102,7 @@ class App extends Component {
 
                 sessionStorage.setItem('token', this.state.token);
                 sessionStorage.setItem('role', this.state.role);
+                // console.log(this.state.token)
                 history.push('/authors')
             }
         }).catch((err) => {
@@ -116,12 +119,13 @@ class App extends Component {
     onGetAuthors = async () => {
         var token = sessionStorage.getItem('token');
         if (token) {
-            let url = API_ENDPOINT + 'book/authors/';
-            console.log(url)
+            let url = API_ENDPOINT + 'authors/';
+            // console.log(token)
+            // console.log(url)
             let options = {
                 method: "GET",
                 url: url,
-                header: {
+                headers: {
                     "Authorization": "Bearer " + token,
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -130,7 +134,7 @@ class App extends Component {
             }
 
             await axios({ ...options }).then((res) => {
-                //  console.log(res)
+                 console.log(res)
                 if (res) {
                     var authorArr = res.data;
                     this.setState({
@@ -146,21 +150,50 @@ class App extends Component {
         }
     }
 
+    onGetUsers = async () => {
+        var token = sessionStorage.getItem('token');
+        if (token) {
+            let url = API_ENDPOINT + 'users/';
+            let options = {
+                method: "GET",
+                url: url,
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+
+            }
+
+            await axios({ ...options }).then((res) => {
+                if (res) {
+                    var userArr = res.data;
+                    this.setState({
+                        users: userArr
+                    });
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+
+
+        }
+    }
 
     onCreateAuthor = (data) => {
-        console.log(data);
+        // console.log(data);
         var token = sessionStorage.getItem('token');
         var role = sessionStorage.getItem('role');
-        console.log('role', role)
+        // console.log('role', role)
         if (token) {
             if (data.id) {
                 console.log("UPDATING AUTHOR IN APP ");
                 let {firstname, lastname, email, id} = data;
-                let url = API_ENDPOINT + 'book/authors/' + id + '/';
+                let url = API_ENDPOINT + 'authors/' + id + '/';
                 let options = {
                     method: 'PATCH',
                     url: url,
-                    header: {
+                    headers: {
                         'Authorization': 'Bearer ' + token,
                         'Content-Type': 'application/json'
                     },
@@ -179,19 +212,19 @@ class App extends Component {
                     }
                 }).catch((err)=>{
                     console.log(err);              
-                    window.confirm('Email Existed!')
+                    // window.confirm('Email Existed!')
                 })
             }
             else {
-                if(role=='admin')
+                if(role==='admin')
                 {
                     console.log("CREATE NEW AUTHOR IN APP")
                     let { firstname, lastname, email } = data;
-                    let url = API_ENDPOINT + 'book/authors/';
+                    let url = API_ENDPOINT + 'authors/';
                     let options = {
                         method: 'POST',
                         url: url,
-                        header: {
+                        headers: {
                             'Authorization': 'Bearer ' + token,
                             'Content-Type': 'application/json'
                         },
@@ -226,16 +259,16 @@ class App extends Component {
         var token = sessionStorage.getItem('token');
         var role = sessionStorage.getItem('role');
         if (token) {
-            if(role == 'admin')
+            if(role === 'admin')
             {
                 if (window.confirm('Are you sure you wish to delete this item?'))
                 {
                     var id = data;
-                    var url = API_ENDPOINT + 'book/authors/' + id + "/";
+                    var url = API_ENDPOINT + 'authors/' + id + "/";
                     var options = {
                         method: 'DELETE',
                         url: url,
-                        header: {
+                        headers: {
                             'Authorization': 'Bearer ' + token,
                             'Content-Type': 'application/json'
                         },
@@ -260,11 +293,28 @@ class App extends Component {
         }
     }
 
-    // onEditAuthor = (data) => {
-    //     // console.log("ON EDIT ID= ", data);
-    // }
+    onRedirectToUser =  () => {
+        console.log("asdasdasdasdasdas")
+        // let isCheckvalid = await this.checkValidToken()
+        // if (isCheckvalid === true) {
+        //     await this.setState({ isLogin: isCheckvalid })
+        //     history.push('/users');
+        // }
+        // else {
+        //     history.push('/login')
+        // }
+    }
 
-    
+    onTest = async () =>{
+        let isCheckvalid = await this.checkValidToken()
+        if (isCheckvalid === true) {
+            await this.setState({ isLogin: isCheckvalid })
+            history.push('/users');
+        }
+        else {
+            history.push('/login')
+        }
+    }
 
     render() {
         return (
@@ -286,7 +336,23 @@ class App extends Component {
                                 authors={this.state.authors}
                                 onCreateAuthor={this.onCreateAuthor}
                                 onDeleteAuthor={this.onDeleteAuthor}
-                                onEditAuthor={this.onEditAuthor} />
+                                onEditAuthor={this.onEditAuthor}
+                                // onRedirectToUser={this.onRedirectToUser}
+                                onTest={this.onTest}
+                                 />
+                        )} />
+
+                    <Route
+                        exact
+                        path="/users"
+                        render={(props) => (
+                            <Users
+                                onGetUsers={this.onGetUsers}
+                                users={this.state.users}
+                                // onCreateAuthor={this.onCreateAuthor}
+                                // onDeleteAuthor={this.onDeleteAuthor}
+                                // onEditAuthor={this.onEditAuthor} 
+                            />
                         )} />
                     <Redirect to="/login" from="/" />
                 </Switch>
@@ -297,7 +363,7 @@ class App extends Component {
                     style={customStyles}
                     contentLabel="Example Modal"
                     >
-                    <div className="error-message">You dont have permission to create</div>
+                    <div className="error-message">You dont have permission to delete</div>
                     <button className="btn-close" onClick={this.closeModal}>Close</button>
                 </Modal>
             </Router>

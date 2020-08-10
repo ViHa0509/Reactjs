@@ -10,7 +10,7 @@ const overlay = {
       padding: 0,
       border: 0,
       overflow: 'hidden',
-      backgroundColor: 'unset',
+      // backgroundColor: 'unset',
       left: '50%',
       top: '50%',
       right: 'auto',
