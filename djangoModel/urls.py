@@ -28,6 +28,7 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.UserLoginView.as_view(), name='login'),
+    path('register/',views.RegisterUser.as_view(),name = 'register'),
     path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'), 
     url('', include(router.urls)),
 ]
