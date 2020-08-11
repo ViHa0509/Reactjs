@@ -26,7 +26,7 @@ class Users extends Component{
         }
     }
 
-   componentWillReceiveProps = (nextProps) =>{
+    componentWillReceiveProps = (nextProps) =>{
        if(nextProps.users !== this.state.users){
            this.setState({
                users: nextProps.users,
@@ -34,13 +34,13 @@ class Users extends Component{
                showEditForm: false,
            });
        }
-   }
+    }
 
-   onCreateUser = (data) =>{
+    onCreateUser = (data) =>{
         this.props.onCRUser(data);
     }
 
-    onEditUser = (data) =>{
+    onEditedUser = (data) =>{
         this.props.onEditUser(data);
     }
 
@@ -63,12 +63,12 @@ class Users extends Component{
     //     this.props.onDeleteUser(id);
     // }
 
-    onEditUser = async(user) =>{
+    onEditedUser = async(user) =>{
         console.log("ON EDITING USER")
+        console.log('user', user)
         await this.setState({
             showEditForm: true,
             selectedUser:{
-                username:user.username,
                 firstname: user.first_name,
                 lastname: user.last_name,
                 email: user.email,
@@ -100,7 +100,6 @@ class Users extends Component{
             this.setState({
                 showEditForm: !this.state.showEditForm,
                 selectedUser:{
-                    'username':'',
                     'firstname': '',
                     'lastname': '',
                     'email': '',
@@ -172,7 +171,9 @@ class Users extends Component{
                         <td>{user.email}</td>
                         <td>
                             <div className="icon-div">
-                                <button type="button" className="btn btn-info" onClick={this.onEditForm}> <i className="fa fa-edit"></i>
+                                <button type="button" className="btn btn-info" 
+                                    onClick={()=>{this.onEditedUser(user)}}> 
+                                    <i className="fa fa-edit"></i>
                                 </button>
                                 <button 
                                     // onClick={() => { this.onDeleteuser(user.id)}} 
@@ -201,7 +202,7 @@ class Users extends Component{
                     {
                         this.state.showEditForm ? 
                         <UserEdit
-                            onEUser={this.onEditUser}
+                            onEUser={this.onEditedUser}
                             selectedUser={this.state.selectedUser}
                             /> : 
                         null

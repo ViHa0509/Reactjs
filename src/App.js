@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route, Switch, Redirect, Router, useLocation } from "react-router-dom";
+import { Route, Switch, Redirect, Router } from "react-router-dom";
 import Login from './components/Login';
 import Authors from './components/Authors';
 import Users from './components/Users';
@@ -304,7 +304,7 @@ class App extends Component {
         var token = sessionStorage.getItem('token');
         if (token) {
             if (data.id) {
-                console.log("UPDATING AUTHOR IN APP ");
+                console.log("UPDATING USER IN APP ");
                 let {firstname, lastname, email, id} = data;
                 let url = API_ENDPOINT + 'users/' + id + '/';
                 let options = {
@@ -320,7 +320,6 @@ class App extends Component {
                         'email': email
                     }
                 };
-                
 
                 axios({...options}).then((res)=>{
                     console.log(res)

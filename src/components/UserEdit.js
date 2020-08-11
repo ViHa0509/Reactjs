@@ -9,8 +9,7 @@ class UserEdit extends Component {
             username:'',
             firstname: '',
             lastname: '',
-            email: '',
-            password:''
+            email: ''
         }
     }
 
@@ -46,12 +45,10 @@ class UserEdit extends Component {
 
     componentWillReceiveProps = (nextProps) =>{
         console.log("RECEIVING PROPS")
-        console.log(nextProps.selectedUser);
         var selectedUser = nextProps.selectedUser
         if(nextProps.selectedUser.id !== this.state.id){
             this.setState({
                 id: selectedUser.id,
-                username:selectedUser.username,
                 firstname: selectedUser.firstname,
                 lastname: selectedUser.lastname,
                 email: selectedUser.email
@@ -64,16 +61,25 @@ class UserEdit extends Component {
         console.log(this.props.selectedUser.id);
         if(this.props.selectedUser.id !== ''){
             var {selectedUser} = this.props;
-            console.log('asdasdsadad',selectedUser);
+            // console.log('asdasdsadad',selectedUser);
             this.setState({
                 id: selectedUser.id,
-                username:selectedUser.username,
                 firstname: selectedUser.firstname,
                 lastname: selectedUser.lastname,
                 email: selectedUser.email
             })
         }
     }
+    
+    onEditUser = (event) =>{
+        event.preventDefault();
+        if(this.handleValidation()){
+            this.props.onEUser(this.state);
+         }else{
+            window.confirm('Invalid email');
+         }
+    }    
+
     
     render() {
         return (
