@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route, Switch, Redirect, Router } from "react-router-dom";
+import { Route, Switch, Redirect, Router, useLocation } from "react-router-dom";
 import Login from './components/Login';
 import Authors from './components/Authors';
 import Users from './components/Users';
@@ -26,7 +26,6 @@ class App extends Component {
             modalIsOpen: false
         }
     }
-
 
     checkValidToken = async () => {
         var token = sessionStorage.getItem('token');
@@ -61,15 +60,22 @@ class App extends Component {
 
     componentDidMount = async () => {
         let isCheckvalid = await this.checkValidToken()
+        var currentLocation = window.location.pathname;
         if (isCheckvalid === true) {
             await this.setState({ isLogin: isCheckvalid })
-            history.push('/authors');
+            console.log('current url:',''+ currentLocation);
+            if(currentLocation === '/login' || currentLocation === '/')
+            {
+                history.push('/authors');
+            }
+            else {
+                history.push(currentLocation);
+            }
         }
         else {
             history.push('/login')
         }
     }
-
 
     onLogin = async (data) => {
         var { username } = data;
@@ -114,7 +120,6 @@ class App extends Component {
     closeModal = () => {
         this.setState({ modalIsOpen: false });
     }
-
 
     onGetAuthors = async () => {
         var token = sessionStorage.getItem('token');
@@ -254,6 +259,83 @@ class App extends Component {
 
     }
 
+    onCreateUser = (data) => {
+        var token = sessionStorage.getItem('token');
+        var role = sessionStorage.getItem('role');
+        if (token) 
+        {
+            if(role === 'admin')
+            {
+                console.log("CREATE NEW USER IN APP")
+                let {email,username,password } = data;
+                let url = API_ENDPOINT + 'register/';
+                let options = {
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        'email':email,
+                        'username':username,
+                        'password': password
+                    }
+                };
+                axios({ ...options }).then((res) => {
+                    if (res && res.status === 201) {
+                        this.onGetUsers();
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    window.confirm('Email Existed!')
+                })
+            }
+            else
+            {
+                window.confirm('You dont have permission to create');
+                this.onGetUsers();
+            }
+        }
+
+    }
+
+    onEditUser = (data) => {
+        var token = sessionStorage.getItem('token');
+        if (token) {
+            if (data.id) {
+                console.log("UPDATING AUTHOR IN APP ");
+                let {firstname, lastname, email, id} = data;
+                let url = API_ENDPOINT + 'users/' + id + '/';
+                let options = {
+                    method: 'PATCH',
+                    url: url,
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        'first_name': firstname,
+                        'last_name': lastname,
+                        'email': email
+                    }
+                };
+                
+
+                axios({...options}).then((res)=>{
+                    console.log(res)
+                    if(res && res.status === 200){
+                        this.onGetUsers();
+                    }
+                }).catch((err)=>{
+                    console.log(err);              
+                    // window.confirm('Email Existed!')
+                })
+            }
+        }
+
+    }
+
     onDeleteAuthor = async (data) => {
         // console.log("ON DELETE ID= ", data);
         var token = sessionStorage.getItem('token');
@@ -293,23 +375,34 @@ class App extends Component {
         }
     }
 
-    onRedirectToUser =  () => {
-        console.log("asdasdasdasdasdas")
-        // let isCheckvalid = await this.checkValidToken()
-        // if (isCheckvalid === true) {
-        //     await this.setState({ isLogin: isCheckvalid })
-        //     history.push('/users');
-        // }
-        // else {
-        //     history.push('/login')
-        // }
-    }
+    // onRedirectToUser =  () => {
+    //     console.log("asdasdasdasdasdas")
+    //     // let isCheckvalid = await this.checkValidToken()
+    //     // if (isCheckvalid === true) {
+    //     //     await this.setState({ isLogin: isCheckvalid })
+    //     //     history.push('/users');
+    //     // }
+    //     // else {
+    //     //     history.push('/login')
+    //     // }
+    // }
 
-    onTest = async () =>{
+    onRedirectToUser = async () =>{
         let isCheckvalid = await this.checkValidToken()
         if (isCheckvalid === true) {
             await this.setState({ isLogin: isCheckvalid })
             history.push('/users');
+        }
+        else {
+            history.push('/login')
+        }
+    }
+    
+    onRedirectToAuthor = async () =>{
+        let isCheckvalid = await this.checkValidToken()
+        if (isCheckvalid === true) {
+            await this.setState({ isLogin: isCheckvalid })
+            history.push('/authors');
         }
         else {
             history.push('/login')
@@ -337,8 +430,7 @@ class App extends Component {
                                 onCreateAuthor={this.onCreateAuthor}
                                 onDeleteAuthor={this.onDeleteAuthor}
                                 onEditAuthor={this.onEditAuthor}
-                                // onRedirectToUser={this.onRedirectToUser}
-                                onTest={this.onTest}
+                                onRedirectToUser={this.onRedirectToUser}
                                  />
                         )} />
 
@@ -349,9 +441,9 @@ class App extends Component {
                             <Users
                                 onGetUsers={this.onGetUsers}
                                 users={this.state.users}
-                                // onCreateAuthor={this.onCreateAuthor}
-                                // onDeleteAuthor={this.onDeleteAuthor}
-                                // onEditAuthor={this.onEditAuthor} 
+                                onCRUser={this.onCreateUser}
+                                onEditUser={this.onEditUser}
+                                onRedirectToAuthor={this.onRedirectToAuthor} 
                             />
                         )} />
                     <Redirect to="/login" from="/" />

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import './Authors.css';
 
-class UserForm extends Component {
+class UserEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -10,7 +10,7 @@ class UserForm extends Component {
             firstname: '',
             lastname: '',
             email: '',
-            errors: ''
+            password:''
         }
     }
 
@@ -46,67 +46,45 @@ class UserForm extends Component {
 
     componentWillReceiveProps = (nextProps) =>{
         console.log("RECEIVING PROPS")
-        console.log(nextProps.selectedAuthor);
-        var selectedAuthor = nextProps.selectedAuthor
-        if(nextProps.selectedAuthor.id !== this.state.id){
+        console.log(nextProps.selectedUser);
+        var selectedUser = nextProps.selectedUser
+        if(nextProps.selectedUser.id !== this.state.id){
             this.setState({
-                id: selectedAuthor.id,
-                firstname: selectedAuthor.firstname,
-                lastname: selectedAuthor.lastname,
-                email: selectedAuthor.email
+                id: selectedUser.id,
+                username:selectedUser.username,
+                firstname: selectedUser.firstname,
+                lastname: selectedUser.lastname,
+                email: selectedUser.email
             })
         }
     }
 
     componentWillMount = () =>{
         console.log("UPDATING");
-        if(this.props.selectedAuthor.id !== ''){
-            var {selectedAuthor} = this.props;
-            console.log(selectedAuthor);
+        console.log(this.props.selectedUser.id);
+        if(this.props.selectedUser.id !== ''){
+            var {selectedUser} = this.props;
+            console.log('asdasdsadad',selectedUser);
             this.setState({
-                id: selectedAuthor.id,
-                firstname: selectedAuthor.firstname,
-                lastname: selectedAuthor.lastname,
-                email: selectedAuthor.email
+                id: selectedUser.id,
+                username:selectedUser.username,
+                firstname: selectedUser.firstname,
+                lastname: selectedUser.lastname,
+                email: selectedUser.email
             })
         }
     }
-
-    onCreateAuthor = (event) =>{
-        event.preventDefault();
-        if(this.handleValidation()){
-            this.props.onCreateAuthor(this.state);
-         }else{
-            window.confirm('Invalid email');
-         }
-    }
-
-
-
+    
     render() {
         return (
             <div className="white-text add-author">
-                <form onSubmit={this.onCreateUser}>
+                <form onSubmit={this.onEditUser}>
                     <div className="container">
                         <br />
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label" />
                             <div className="col-sm-6">
-                                <h3>{this.state.id !== ''? 
-                                "Edit User":
-                                "Create User"}</h3>
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-3 col-form-label">Username</label>
-                            <div className="col-sm-9">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="username"
-                                    name="username"
-                                    value={this.state.username}
-                                    onChange={this.onChange} />
+                                <h3>Edit User</h3>
                             </div>
                         </div>
                         <div className="form-group row">
@@ -144,16 +122,11 @@ class UserForm extends Component {
                                     value={this.state.email}
                                     onChange={this.onChange} />
                             </div>
-                        </div>
+                        </div>                     
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label " />
                             <div className="col-sm-6">
-                                <button 
-                                    type="submit" 
-                                    className="btn btn-success custom-button">
-                                        {this.state.id !== '' ? 
-                                        "Edit":
-                                        "Create"}</button>
+                                <button type="submit" className="btn btn-success custom-button">Edit</button>
                             </div>
                         </div>
                     </div>
@@ -163,4 +136,4 @@ class UserForm extends Component {
     }
 }
 
-export default UserForm;
+export default UserEdit;

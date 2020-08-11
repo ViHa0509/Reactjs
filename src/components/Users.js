@@ -1,7 +1,8 @@
 // import axios  from 'axios';
 import React, {Component} from 'react';
 // import {API_ENDPOINT} from '../const';
-import UserForm from './UserForm';
+import Register from './Register';
+import UserEdit from './UserEdit';
 import { customStyles } from '../components/utils/CustomModal';
 import Modal from 'react-modal';
 
@@ -12,7 +13,8 @@ class Users extends Component{
         super(props);
         this.state = {
             users: [],
-            showForm: false,
+            showRegisterForm: false,
+            showEditForm: false,
             selectedUSer: {
             'username':'',
             'firstname': '',
@@ -28,10 +30,19 @@ class Users extends Component{
        if(nextProps.users !== this.state.users){
            this.setState({
                users: nextProps.users,
-               showForm: false
+               showRegisterForm: false,
+               showEditForm: false,
            });
        }
    }
+
+   onCreateUser = (data) =>{
+        this.props.onCRUser(data);
+    }
+
+    onEditUser = (data) =>{
+        this.props.onEditUser(data);
+    }
 
     onChange = async (event) =>{
         console.log('ON CHANGING VALUE')
@@ -52,44 +63,56 @@ class Users extends Component{
     //     this.props.onDeleteUser(id);
     // }
 
-    // onEditUser = async(author) =>{
-    //     console.log("ON EDITING AUTHOR")
-    //     await this.setState({
-    //         showForm: true,
-    //         selectedAuthor:{
-    //             firstname: author.first_name,
-    //             lastname: author.last_name,
-    //             email: author.email,
-    //             id: author.id
-    //         }
-    //     });
+    onEditUser = async(user) =>{
+        console.log("ON EDITING USER")
+        await this.setState({
+            showEditForm: true,
+            selectedUser:{
+                username:user.username,
+                firstname: user.first_name,
+                lastname: user.last_name,
+                email: user.email,
+                id: user.id
+            }
+        });
+    }
 
+    onRegisterForm = () =>{
+        var role = sessionStorage.getItem('role');
+        if(role === 'user')
+        {
+            this.setState({ modalIsOpen: true });
+        }
+        else{
+            this.setState({
+                showRegisterForm: !this.state.showRegisterForm,
+            })
+        }
+    }
 
-    // }
-
-    // onToggleForm = () =>{
-    //     var role = sessionStorage.getItem('role');
-    //     if(role === 'user')
-    //     {
-    //         this.setState({ modalIsOpen: true });
-    //     }
-    //     else{
-    //         this.setState({
-    //             showForm: !this.state.showForm,
-    //             selectedAuthor:{
-    //                 'username':'',
-    //                 'firstname': '',
-    //                 'lastname': '',
-    //                 'email': '',
-    //                 'id': ''
-    //             }
+    onEditForm = () =>{
+        var role = sessionStorage.getItem('role');
+        if(role === 'user')
+        {
+            this.setState({ modalIsOpen: true });
+        }
+        else{
+            this.setState({
+                showEditForm: !this.state.showEditForm,
+                selectedUser:{
+                    'username':'',
+                    'firstname': '',
+                    'lastname': '',
+                    'email': '',
+                    'id': ''
+                }
     
-    //         })
-    //     }
-    // }
+            })
+        }
+    }
+
 
     onLogout = () =>{
-        // console.log("asdasdasdasdas")
         sessionStorage.removeItem('token');
         window.location.reload()
     }
@@ -118,6 +141,11 @@ class Users extends Component{
        
     // }
         
+    onRedirectToAuthor = () =>{
+        this.props.onRedirectToAuthor();
+    }
+
+    
 
     render(){
         return(
@@ -144,19 +172,10 @@ class Users extends Component{
                         <td>{user.email}</td>
                         <td>
                             <div className="icon-div">
-                                <button 
-                                    type="button" 
-                                    className="btn btn-info"
-                                    // onClick={()=>{
-                                    //     this.onEditAuthor(author)
-                                    // }}
-                                >
-                                    <i className="fa fa-edit"></i>
+                                <button type="button" className="btn btn-info" onClick={this.onEditForm}> <i className="fa fa-edit"></i>
                                 </button>
                                 <button 
-                                    // onClick={() => {   
-                                    //     this.onDeleteAuthor(author.id)
-                                    // }} 
+                                    // onClick={() => { this.onDeleteuser(user.id)}} 
                                     type="button" 
                                     className="btn btn-danger">
                                     <i className="fa fa-trash"></i>
@@ -168,22 +187,31 @@ class Users extends Component{
                 ))}
                 </tbody>
                 </table>
-                <center><button className="btn btn-primary" >Add New Record</button></center>
-                {/* onClick={this.onToggleForm} */}
-                {/* <div>
+                <center><button className="btn btn-primary" onClick={this.onRegisterForm}>Add New User</button></center>
+                <div>
                     {
-                        this.state.showForm ? 
-                        <AuthorForm 
-                            onCreateAuthor={this.props.onCreateAuthor}
-                            selectedAuthor={this.state.selectedAuthor}
+                        this.state.showRegisterForm ? 
+                        <Register
+                            onCUser={this.onCreateUser}
                             /> : 
                         null
                     }
-                </div> */}
+                </div>
+                <div>
+                    {
+                        this.state.showEditForm ? 
+                        <UserEdit
+                            onEUser={this.onEditUser}
+                            selectedUser={this.state.selectedUser}
+                            /> : 
+                        null
+                    }
+                </div>
                 <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
+                <div><center><button className="btn btn-primary" onClick={this.onRedirectToAuthor}><i className="fa fa-user" aria-hidden="true"> Author</i></button></center></div>
                 <div>
                 {/* {
-                    this.renderUser(this.state.authors)
+                    this.renderUser(this.state.users)
                 } */}
                 </div>
                 <Modal

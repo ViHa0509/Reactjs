@@ -86,7 +86,6 @@ class Authors extends Component{
     }
 
     onLogout = () =>{
-        console.log("asdasdasdasdas")
         sessionStorage.removeItem('token');
         window.location.reload()
     }
@@ -102,7 +101,6 @@ class Authors extends Component{
     // onRedirectUser = () =>{
     //     this.props.onRedirectUser()
     // }
-
     // // renderUser = (data) => {
     // //     const userId = 1;
     // //     console.log('data',data)
@@ -119,9 +117,8 @@ class Authors extends Component{
        
     // // }
 
-    onTest = () =>{
-        console.log("TEST")
-        this.props.onTest();
+    onRedirectToUser = () =>{
+        this.props.onRedirectToUser();
     }
         
 
@@ -183,7 +180,7 @@ class Authors extends Component{
                     }
                 </div>
                 <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
-                <div><center><button className="btn btn-primary" onClick={this.onTest}><i className="fa fa-user" aria-hidden="true"> user</i></button></center></div>
+                <div><center><button className="btn btn-primary" onClick={this.onRedirectToUser}><i className="fa fa-user" aria-hidden="true"> user</i></button></center></div>
                 <div>
                 </div>
                 <Modal
