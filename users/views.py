@@ -11,9 +11,10 @@ from django.contrib.auth.models import Permission
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from djangoModel.permission import UserPermission
+from djangoModel.permission import UserPermission#,accountPermission
+from rest_framework import serializers
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list` and `detail` actions.
     """
@@ -21,3 +22,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     authentication_class =[JWTAuthentication]
     permission_classes = [IsAuthenticated, UserPermission]
+
+    # def perform_update(self, serializer):
+    #     serializer.save()

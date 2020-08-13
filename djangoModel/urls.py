@@ -21,10 +21,14 @@ from . import views
 
 from books.views import authorViewSet
 from users.views import UserViewSet
+from groups.views import GroupViewSet
+from permissions.views import PermissionViewSet
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'authors', authorViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'permissions', PermissionViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.UserLoginView.as_view(), name='login'),
