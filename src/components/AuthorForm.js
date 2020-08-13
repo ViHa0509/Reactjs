@@ -78,9 +78,16 @@ class AuthorForm extends Component {
         event.preventDefault();
         if(this.handleValidation()){
             this.props.onCreateAuthor(this.state);
-         }else{
-            window.confirm('Invalid email');
-         }
+         }else 
+         {
+            if(this.state.email===''||this.state.firstname === ''|| this.state.lastname==='')
+            {
+                window.confirm('Please fill all infomation');
+            }
+            else {
+                window.confirm('Invalid email');
+             }
+         }    
     }
 
 

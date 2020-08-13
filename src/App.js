@@ -301,6 +301,8 @@ class App extends Component {
     }
 
     onEditUser = (data) => {
+        console.log("EDITING")
+        console.log(data)
         var token = sessionStorage.getItem('token');
         if (token) {
             if (data.id) {
@@ -320,6 +322,7 @@ class App extends Component {
                         'email': email
                     }
                 };
+                console.log(options)
 
                 axios({...options}).then((res)=>{
                     console.log(res)
@@ -368,6 +371,45 @@ class App extends Component {
             else {
                 // window.confirm('You dont have permission to delete');
                 this.onGetAuthors();
+                this.setState({ modalIsOpen: true });
+            }
+
+        }
+    }
+
+    onDeleteUser = async (data) => {
+        // console.log("ON DELETE ID= ", data);
+        var token = sessionStorage.getItem('token');
+        var role = sessionStorage.getItem('role');
+        if (token) {
+            if(role === 'admin')
+            {
+                if (window.confirm('Are you sure you wish to delete this item?'))
+                {
+                    var id = data;
+                    var url = API_ENDPOINT + 'users/' + id + "/";
+                    var options = {
+                        method: 'DELETE',
+                        url: url,
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: "same-origin"
+                    }
+                    await axios({ ...options }).then((res) => {
+
+                        if (res && res.status === 204) {
+                            this.onGetUsers();
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }           
+            }
+            else {
+                // window.confirm('You dont have permission to delete');
+                this.onGetUsers();
                 this.setState({ modalIsOpen: true });
             }
 
@@ -442,6 +484,7 @@ class App extends Component {
                                 users={this.state.users}
                                 onCRUser={this.onCreateUser}
                                 onEditUser={this.onEditUser}
+                                onDeleteUser={this.onDeleteUser}
                                 onRedirectToAuthor={this.onRedirectToAuthor} 
                             />
                         )} />

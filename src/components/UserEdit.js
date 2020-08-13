@@ -61,7 +61,6 @@ class UserEdit extends Component {
         console.log(this.props.selectedUser.id);
         if(this.props.selectedUser.id !== ''){
             var {selectedUser} = this.props;
-            // console.log('asdasdsadad',selectedUser);
             this.setState({
                 id: selectedUser.id,
                 firstname: selectedUser.firstname,
@@ -75,8 +74,15 @@ class UserEdit extends Component {
         event.preventDefault();
         if(this.handleValidation()){
             this.props.onEUser(this.state);
-         }else{
-            window.confirm('Invalid email');
+         }
+         else{
+            if(this.state.email===''||this.state.username === ''|| this.state.password==='')
+            {
+               window.confirm('Please fill all information');
+            }
+             else{
+                window.confirm('Invalid email');
+             }
          }
     }    
 

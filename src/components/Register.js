@@ -49,8 +49,15 @@ class Register extends Component {
         event.preventDefault();
         if(this.handleValidation()){
             this.props.onCUser(this.state);
-         }else{
-            window.confirm('Invalid email');
+         }
+         else{
+             if(this.state.email===''||this.state.username === ''|| this.state.password==='')
+             {
+                window.confirm('Please fill all infomation');
+             }
+             else {
+                window.confirm('Invalid email');
+             }
          }
     }
 

@@ -59,11 +59,11 @@ class Users extends Component{
         this.props.onGetUsers();
     }
 
-    // onDeleteUser = (id) =>{
-    //     this.props.onDeleteUser(id);
-    // }
+    onDeleteUser = (id) =>{
+        this.props.onDeleteUser(id);
+    }
 
-    onEditedUser = async(user) =>{
+    onSelectedUser = async(user) =>{
         console.log("ON EDITING USER")
         console.log('user', user)
         await this.setState({
@@ -172,11 +172,11 @@ class Users extends Component{
                         <td>
                             <div className="icon-div">
                                 <button type="button" className="btn btn-info" 
-                                    onClick={()=>{this.onEditedUser(user)}}> 
+                                    onClick={()=>{this.onSelectedUser(user)}}> 
                                     <i className="fa fa-edit"></i>
                                 </button>
                                 <button 
-                                    // onClick={() => { this.onDeleteuser(user.id)}} 
+                                    onClick={() => { this.onDeleteUser(user.id)}} 
                                     type="button" 
                                     className="btn btn-danger">
                                     <i className="fa fa-trash"></i>
