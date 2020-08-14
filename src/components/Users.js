@@ -54,7 +54,6 @@ class Users extends Component{
         });
       }
 
-
     onGetUsers = () =>{
         this.props.onGetUsers();
     }
@@ -110,7 +109,6 @@ class Users extends Component{
         }
     }
 
-
     onLogout = () =>{
         sessionStorage.removeItem('token');
         window.location.reload()
@@ -144,9 +142,13 @@ class Users extends Component{
         this.props.onRedirectToAuthor();
     }
 
+    onRedirectToGroup = () =>{
+        this.props.onRedirectToGroup();
+    }
     
 
     render(){
+        console.log(this.state.showRegisterForm)
         return(
             <div>
                 <table className="table table-striped table-bordered table-sm tinymask ">
@@ -188,13 +190,13 @@ class Users extends Component{
                 ))}
                 </tbody>
                 </table>
-                <center><button className="btn btn-primary" onClick={this.onRegisterForm}>Add New User</button></center>
+                <center><button className="btn btn-success" onClick={this.onRegisterForm}>Add New User</button></center>
                 <div>
                     {
                         this.state.showRegisterForm ? 
                         <Register
                             onCUser={this.onCreateUser}
-                            /> : 
+                            />  : 
                         null
                     }
                 </div>
@@ -208,8 +210,13 @@ class Users extends Component{
                         null
                     }
                 </div>
-                <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
-                <div><center><button className="btn btn-primary" onClick={this.onRedirectToAuthor}><i className="fa fa-user" aria-hidden="true"> Author</i></button></center></div>
+                <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fas fa-sign-in-alt" aria-hidden="true"> logout</i></button></left></div>
+                <div>
+                    <center>
+                        <button className="btn btn-primary" onClick={this.onRedirectToAuthor}><i className="fa fa-user" aria-hidden="true"> Author</i></button>
+                        <button className="btn btn-warning" onClick={this.onRedirectToGroup}><i className="fa fa-lock" aria-hidden="true"> Author</i></button>
+                    </center>
+                </div>
                 <div>
                 {/* {
                     this.renderUser(this.state.users)

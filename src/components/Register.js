@@ -5,6 +5,7 @@ class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            groups: [],
             id: '',
             username:'',
             firstname: '',
@@ -13,6 +14,23 @@ class Register extends Component {
             password:''
         }
     }
+
+    // componentWillReceiveProps = (nextProps) =>{
+    //     if(nextProps.groups !== this.state.groups){
+    //         this.setState({
+    //             groups: nextProps.groups,
+    //         });
+    //     }
+    // }
+
+    // onGetGroups = () =>{
+    //     this.props.onGetGroup();
+       
+    // }
+
+    // componentDidMount =() =>{
+    //     this.onGetGroups();
+    // }
 
     checkvalidmail(email){
         var check, position, count;
@@ -97,6 +115,16 @@ class Register extends Component {
                                     onChange={this.onChange} />
                             </div>
                         </div>
+                        {/* <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Group:</label>
+                            <div className="col-sm-9">
+                                <select id="perm" className="form-control">
+                                {this.state.groups.map((group, index) =>(
+                                    <option value="permUser"  key ={index}>{group.name}</option>
+                                    ))} 
+                                </select>                           
+                            </div>
+                        </div>  */}
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Password:</label>
                             <div className="col-sm-9">
@@ -108,7 +136,7 @@ class Register extends Component {
                                     value={this.state.password}
                                     onChange={this.onChange} />
                             </div>
-                        </div>                     
+                        </div>          
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label " />
                             <div className="col-sm-6">

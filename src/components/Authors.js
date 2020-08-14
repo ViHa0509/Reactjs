@@ -120,9 +120,13 @@ class Authors extends Component{
     onRedirectToUser = () =>{
         this.props.onRedirectToUser();
     }
-        
+    
+    onRedirectToGroup = () =>{
+        this.props.onRedirectToGroup();
+    }
 
     render(){
+        console.log('abcdefg',this.state.groups)
         return(
             <div>
                 <table className="table table-striped table-bordered table-sm tinymask ">
@@ -168,7 +172,7 @@ class Authors extends Component{
                 ))}
                 </tbody>
                 </table>
-                <center><button className="btn btn-primary" onClick={this.onToggleForm}>Add New Record</button></center>
+                <center><button className="btn btn-success" onClick={this.onToggleForm}>Add New Record</button></center>
                 <div>
                     {
                         this.state.showForm ? 
@@ -179,8 +183,13 @@ class Authors extends Component{
                         null
                     }
                 </div>
-                <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fa fa-sign" aria-hidden="true"> logout</i></button></left></div>
-                <div><center><button className="btn btn-primary" onClick={this.onRedirectToUser}><i className="fa fa-user" aria-hidden="true"> user</i></button></center></div>
+                <div><left><button className="btn btn-primary" onClick={this.onLogout}><i className="fas fa-sign-in-alt" aria-hidden="true"> logout</i></button></left></div>
+                <div>
+                    <center>
+                        <button className="btn btn-primary" onClick={this.onRedirectToUser}><i className="fa fa-user" aria-hidden="true"> User</i></button>
+                        <button className="btn btn-success" onClick={this.onRedirectToGroup}><i className="fa fa-lock" aria-hidden="true"> Group</i></button>
+                    </center>
+                </div>
                 <div>
                 </div>
                 <Modal

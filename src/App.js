@@ -11,6 +11,7 @@ import axios from 'axios';
 import { API_ENDPOINT } from './const';
 import Modal from 'react-modal';
 import { customStyles } from './components/utils/CustomModal';
+import Group from './components/Group';
 
 const history = createBrowserHistory();
 
@@ -19,6 +20,7 @@ class App extends Component {
         super(props);
         this.state = {
             token: '',
+            groups:[],
             authors: [],
             users:[],
             role:'',
@@ -155,6 +157,40 @@ class App extends Component {
         }
     }
 
+    onGetGroups = async () => {
+        var token = sessionStorage.getItem('token');
+        if (token) {
+            let url = API_ENDPOINT + 'groups/';
+            // console.log(token)
+            // console.log(url)
+            let options = {
+                method: "GET",
+                url: url,
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+
+            }
+
+            await axios({ ...options }).then((res) => {
+                 console.log(res.data)
+                if (res) {
+                    var groupArr = res.data;
+                    this.setState({
+                        groups: groupArr
+                    });
+                    console.log(this.state.groups)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+
+
+        }
+    }
+
     onGetUsers = async () => {
         var token = sessionStorage.getItem('token');
         if (token) {
@@ -180,8 +216,6 @@ class App extends Component {
             }).catch((err) => {
                 console.log(err)
             })
-
-
         }
     }
 
@@ -450,6 +484,16 @@ class App extends Component {
         }
     }
 
+    onRedirectToGroup = async () =>{
+        let isCheckvalid = await this.checkValidToken()
+        if (isCheckvalid === true) {
+            await this.setState({ isLogin: isCheckvalid })
+            history.push('/groups');
+        }
+        else {
+            history.push('/login')
+        }
+    }
     render() {
         return (
             <Router history={history}>
@@ -472,6 +516,7 @@ class App extends Component {
                                 onDeleteAuthor={this.onDeleteAuthor}
                                 onEditAuthor={this.onEditAuthor}
                                 onRedirectToUser={this.onRedirectToUser}
+                                onRedirectToGroup = {this.onRedirectToGroup}
                                  />
                         )} />
 
@@ -481,10 +526,25 @@ class App extends Component {
                         render={(props) => (
                             <Users
                                 onGetUsers={this.onGetUsers}
+                                onGetGroup={this.onGetGroups}
                                 users={this.state.users}
+                                groups={this.state.groups}
                                 onCRUser={this.onCreateUser}
                                 onEditUser={this.onEditUser}
                                 onDeleteUser={this.onDeleteUser}
+                                onRedirectToAuthor={this.onRedirectToAuthor}
+                                onRedirectToGroup = {this.onRedirectToGroup} 
+                            />
+                        )} />
+
+                        <Route
+                        exact
+                        path="/groups"
+                        render={(props) => (
+                            <Group
+                                onGetGroups={this.onGetGroups}
+                                groups={this.state.groups}
+                                onRedirectToUser={this.onRedirectToUser}
                                 onRedirectToAuthor={this.onRedirectToAuthor} 
                             />
                         )} />
