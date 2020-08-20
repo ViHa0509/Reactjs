@@ -22,6 +22,3 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     authentication_class =[JWTAuthentication]
     permission_classes = [IsAuthenticated, UserPermission]
-
-    # def perform_update(self, serializer):
-    #     serializer.save()

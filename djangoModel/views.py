@@ -6,8 +6,23 @@ from django.contrib.auth import authenticate
 from django.core.serializers import serialize
 from djangoModel import settings
 from rest_framework.response import Response
-
+#for register
+# from users.serializers import UserSerializer
+# from django.contrib.auth.models import User, Group
+# from rest_framework.generics import CreateAPIView,UpdateAPIView
+# from django.contrib.auth import get_user_model
 from rest_framework import status
+# from django.contrib.auth.models import Permission
+# from djangoModel.permission import UserPermission#,accountPermission
+# from rest_framework import serializers
+
+# class RegisterUser(CreateAPIView):
+#     permission_class = [AllowAny]
+#     model = get_user_model()
+#     serializer_class = UserSerializer
+#     authentication_class =[JWTAuthentication]
+#     permission_classes = [IsAuthenticated, UserPermission]
+    
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
     def post(self, request, format=None):

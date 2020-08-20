@@ -1,5 +1,5 @@
 from rest_framework import permissions
-
+from django.contrib.auth.models import User,Group
 class UserPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -24,23 +24,3 @@ class UserPermission(permissions.BasePermission):
             return request.user.is_superuser
         else:
             return False
-# class accountPermission(permissions.BasePermission):
-
-#     def has_permission(self, request, view):
-#         print('^'*50)
-#         if view.action == 'list':
-#             return request.user.is_authenticated
-#         elif view.action  in ['update', 'partial_update','create', 'destroy']:
-#             return request.user.is_superuser
-#         else:
-#             return False
-
-#     def has_object_permission(self, request, view, obj):
-#         print('*'*50)
-#         # Deny actions on objects if the user is not authenticated
-#         if not request.user.is_authenticated:
-#             return False
-#         elif view.action in  ['create','destroy','list','update', 'partial_update']:
-#             return request.user.is_superuser
-#         else:
-#             return False

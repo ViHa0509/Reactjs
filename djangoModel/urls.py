@@ -24,6 +24,7 @@ from users.views import UserViewSet
 from groups.views import GroupViewSet
 from permissions.views import PermissionViewSet
 from rest_framework.routers import DefaultRouter
+
 router = DefaultRouter()
 router.register(r'authors', authorViewSet)
 router.register(r'users', UserViewSet)
@@ -32,16 +33,7 @@ router.register(r'permissions', PermissionViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.UserLoginView.as_view(), name='login'),
-    path('register/',views.RegisterUser.as_view(),name = 'register'),
     path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'), 
     url('', include(router.urls)),
 ]
 
-# urlpatterns += include('books.urls')
-# urlpatterns += include('books.urls')
-
-# def get_user(user_id):
-#     """
-#     :param user_id: int, to get sdkf
-#     :ret object: user object
-#     """
