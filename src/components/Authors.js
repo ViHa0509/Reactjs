@@ -113,8 +113,7 @@ class Authors extends Component{
     // //                 </div>
     // //             );
     // //         }
-    // //     })
-       
+    // //     })    
     // // }
 
     onRedirectToUser = () =>{
@@ -126,7 +125,6 @@ class Authors extends Component{
     }
 
     render(){
-        console.log('abcdefg',this.state.groups)
         return(
             <div>
                 <table className="table table-striped table-bordered table-sm tinymask ">

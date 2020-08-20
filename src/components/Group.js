@@ -17,6 +17,7 @@ class Group extends Component{
     }
 
     componentWillReceiveProps = (nextProps) =>{
+        console.log('1')
         if(nextProps.groups !== this.state.groups){
             this.setState({
                 groups: nextProps.groups,

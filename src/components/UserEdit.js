@@ -9,8 +9,19 @@ class UserEdit extends Component {
             username:'',
             firstname: '',
             lastname: '',
-            email: ''
+            email: '',
+            ListGroups:[],
+            groups: 1,
         }
+    }
+
+
+    componentDidMount = async () =>{
+        console.log('sasasdasdasdadasd')
+        const ListGroups = await this.props.groups;
+        this.setState({
+            ListGroups
+        });  
     }
 
     checkvalidmail(email){
@@ -43,6 +54,10 @@ class UserEdit extends Component {
         });
     }
 
+    handleChange = (e) => {
+        this.setState({ groups: e.target.value })
+    }
+
     componentWillReceiveProps = (nextProps) =>{
         console.log("RECEIVING PROPS")
         var selectedUser = nextProps.selectedUser
@@ -58,14 +73,14 @@ class UserEdit extends Component {
 
     componentWillMount = () =>{
         console.log("UPDATING");
-        console.log(this.props.selectedUser.id);
         if(this.props.selectedUser.id !== ''){
             var {selectedUser} = this.props;
+            console.log(this.props)
             this.setState({
                 id: selectedUser.id,
                 firstname: selectedUser.firstname,
                 lastname: selectedUser.lastname,
-                email: selectedUser.email
+                email: selectedUser.email,              
             })
         }
     }
@@ -73,7 +88,10 @@ class UserEdit extends Component {
     onEditUser = (event) =>{
         event.preventDefault();
         if(this.handleValidation()){
-            this.props.onEUser(this.state);
+            const data = this.state;
+            data.groups = [this.state.groups];
+            this.props.onEUser(data);
+
          }
          else{
             if(this.state.email===''||this.state.username === ''|| this.state.password==='')
@@ -87,7 +105,14 @@ class UserEdit extends Component {
     }    
 
     
+
     render() {
+
+        let options = this.state.ListGroups.map((group) => {
+            return { value: group.id, label: group.id };
+          })
+
+        console.log(this.state.groups)
         return (
             <div className="white-text add-author">
                 <form onSubmit={this.onEditUser}>
@@ -134,7 +159,17 @@ class UserEdit extends Component {
                                     value={this.state.email}
                                     onChange={this.onChange} />
                             </div>
-                        </div>                     
+                        </div>   
+
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Group:</label>
+                            <div className="col-sm-9">
+                                <select id="perm" className="form-control" onChange={this.handleChange}>
+                                    {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
+                                </select>      
+                            </div>
+                        </div>  
+
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label " />
                             <div className="col-sm-6">

@@ -32,7 +32,6 @@ class App extends Component {
     checkValidToken = async () => {
         var token = sessionStorage.getItem('token');
         
-        // console.log(token)
         var isValid = false;
         if (token) {
             let url = API_ENDPOINT + 'api/token/verify/';
@@ -63,9 +62,9 @@ class App extends Component {
     componentDidMount = async () => {
         let isCheckvalid = await this.checkValidToken()
         var currentLocation = window.location.pathname;
+        this.onGetGroups();
         if (isCheckvalid === true) {
             await this.setState({ isLogin: isCheckvalid })
-            console.log('current url:',''+ currentLocation);
             if(currentLocation === '/login' || currentLocation === '/')
             {
                 history.push('/authors');
@@ -110,7 +109,6 @@ class App extends Component {
 
                 sessionStorage.setItem('token', this.state.token);
                 sessionStorage.setItem('role', this.state.role);
-                // console.log(this.state.token)
                 history.push('/authors')
             }
         }).catch((err) => {
@@ -127,8 +125,6 @@ class App extends Component {
         var token = sessionStorage.getItem('token');
         if (token) {
             let url = API_ENDPOINT + 'authors/';
-            // console.log(token)
-            // console.log(url)
             let options = {
                 method: "GET",
                 url: url,
@@ -147,7 +143,6 @@ class App extends Component {
                     this.setState({
                         authors: authorArr
                     });
-                    // console.log(this.state.author)
                 }
             }).catch((err) => {
                 console.log(err)
@@ -175,13 +170,11 @@ class App extends Component {
             }
 
             await axios({ ...options }).then((res) => {
-                 console.log(res.data)
                 if (res) {
                     var groupArr = res.data;
                     this.setState({
                         groups: groupArr
                     });
-                    console.log(this.state.groups)
                 }
             }).catch((err) => {
                 console.log(err)
@@ -220,10 +213,8 @@ class App extends Component {
     }
 
     onCreateAuthor = (data) => {
-        // console.log(data);
         var token = sessionStorage.getItem('token');
         var role = sessionStorage.getItem('role');
-        // console.log('role', role)
         if (token) {
             if (data.id) {
                 console.log("UPDATING AUTHOR IN APP ");
@@ -251,7 +242,6 @@ class App extends Component {
                     }
                 }).catch((err)=>{
                     console.log(err);              
-                    // window.confirm('Email Existed!')
                 })
             }
             else {
@@ -301,8 +291,8 @@ class App extends Component {
             if(role === 'admin')
             {
                 console.log("CREATE NEW USER IN APP")
-                let {email,username,password } = data;
-                let url = API_ENDPOINT + 'register/';
+                let {email,username,password,groups } = data;
+                let url = API_ENDPOINT + 'users/';
                 let options = {
                     method: 'POST',
                     url: url,
@@ -313,7 +303,8 @@ class App extends Component {
                     data: {
                         'email':email,
                         'username':username,
-                        'password': password
+                        'password': password,
+                        'groups': groups
                     }
                 };
                 axios({ ...options }).then((res) => {
@@ -341,7 +332,7 @@ class App extends Component {
         if (token) {
             if (data.id) {
                 console.log("UPDATING USER IN APP ");
-                let {firstname, lastname, email, id} = data;
+                let {firstname, lastname, email,groups, id} = data;
                 let url = API_ENDPOINT + 'users/' + id + '/';
                 let options = {
                     method: 'PATCH',
@@ -353,10 +344,11 @@ class App extends Component {
                     data: {
                         'first_name': firstname,
                         'last_name': lastname,
-                        'email': email
+                        'email': email,
+                        'groups': groups
                     }
                 };
-                console.log(options)
+                // console.log(options)
 
                 axios({...options}).then((res)=>{
                     console.log(res)
@@ -365,7 +357,6 @@ class App extends Component {
                     }
                 }).catch((err)=>{
                     console.log(err);              
-                    // window.confirm('Email Existed!')
                 })
             }
         }
@@ -373,7 +364,6 @@ class App extends Component {
     }
 
     onDeleteAuthor = async (data) => {
-        // console.log("ON DELETE ID= ", data);
         var token = sessionStorage.getItem('token');
         var role = sessionStorage.getItem('role');
         if (token) {
@@ -403,7 +393,6 @@ class App extends Component {
                 }           
             }
             else {
-                // window.confirm('You dont have permission to delete');
                 this.onGetAuthors();
                 this.setState({ modalIsOpen: true });
             }
@@ -412,7 +401,6 @@ class App extends Component {
     }
 
     onDeleteUser = async (data) => {
-        // console.log("ON DELETE ID= ", data);
         var token = sessionStorage.getItem('token');
         var role = sessionStorage.getItem('role');
         if (token) {
@@ -442,7 +430,6 @@ class App extends Component {
                 }           
             }
             else {
-                // window.confirm('You dont have permission to delete');
                 this.onGetUsers();
                 this.setState({ modalIsOpen: true });
             }
@@ -450,23 +437,12 @@ class App extends Component {
         }
     }
 
-    // onRedirectToUser =  () => {
-    //     console.log("asdasdasdasdasdas")
-    //     // let isCheckvalid = await this.checkValidToken()
-    //     // if (isCheckvalid === true) {
-    //     //     await this.setState({ isLogin: isCheckvalid })
-    //     //     history.push('/users');
-    //     // }
-    //     // else {
-    //     //     history.push('/login')
-    //     // }
-    // }
-
     onRedirectToUser = async () =>{
         let isCheckvalid = await this.checkValidToken()
         if (isCheckvalid === true) {
             await this.setState({ isLogin: isCheckvalid })
             history.push('/users');
+            this.onGetGroups();
         }
         else {
             history.push('/login')
@@ -526,18 +502,17 @@ class App extends Component {
                         render={(props) => (
                             <Users
                                 onGetUsers={this.onGetUsers}
-                                onGetGroup={this.onGetGroups}
                                 users={this.state.users}
-                                groups={this.state.groups}
                                 onCRUser={this.onCreateUser}
                                 onEditUser={this.onEditUser}
                                 onDeleteUser={this.onDeleteUser}
                                 onRedirectToAuthor={this.onRedirectToAuthor}
-                                onRedirectToGroup = {this.onRedirectToGroup} 
+                                onRedirectToGroup = {this.onRedirectToGroup}
+                                groups={this.state.groups} 
                             />
                         )} />
 
-                        <Route
+                    <Route
                         exact
                         path="/groups"
                         render={(props) => (

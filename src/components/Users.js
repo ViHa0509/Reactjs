@@ -27,7 +27,7 @@ class Users extends Component{
     }
 
     componentWillReceiveProps = (nextProps) =>{
-       if(nextProps.users !== this.state.users){
+       if(nextProps.users !== this.state.users){      
            this.setState({
                users: nextProps.users,
                showRegisterForm: false,
@@ -71,7 +71,7 @@ class Users extends Component{
                 firstname: user.first_name,
                 lastname: user.last_name,
                 email: user.email,
-                id: user.id
+                id: user.id,
             }
         });
     }
@@ -102,7 +102,7 @@ class Users extends Component{
                     'firstname': '',
                     'lastname': '',
                     'email': '',
-                    'id': ''
+                    'id': '',                    
                 }
     
             })
@@ -148,7 +148,6 @@ class Users extends Component{
     
 
     render(){
-        console.log(this.state.showRegisterForm)
         return(
             <div>
                 <table className="table table-striped table-bordered table-sm tinymask ">
@@ -159,6 +158,7 @@ class Users extends Component{
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
+                    <th>Group</th>
                     <th>Actions</th>
                     </tr>
                 </thead>
@@ -171,6 +171,7 @@ class Users extends Component{
                         <td>{user.first_name}</td> 
                         <td>{user.last_name}</td>
                         <td>{user.email}</td>
+                        <td>{user.groups}</td>
                         <td>
                             <div className="icon-div">
                                 <button type="button" className="btn btn-info" 
@@ -196,6 +197,7 @@ class Users extends Component{
                         this.state.showRegisterForm ? 
                         <Register
                             onCUser={this.onCreateUser}
+                            groups = {this.props.groups}
                             />  : 
                         null
                     }
@@ -206,6 +208,7 @@ class Users extends Component{
                         <UserEdit
                             onEUser={this.onEditedUser}
                             selectedUser={this.state.selectedUser}
+                            groups = {this.props.groups}
                             /> : 
                         null
                     }
@@ -214,7 +217,7 @@ class Users extends Component{
                 <div>
                     <center>
                         <button className="btn btn-primary" onClick={this.onRedirectToAuthor}><i className="fa fa-user" aria-hidden="true"> Author</i></button>
-                        <button className="btn btn-warning" onClick={this.onRedirectToGroup}><i className="fa fa-lock" aria-hidden="true"> Author</i></button>
+                        <button className="btn btn-warning" onClick={this.onRedirectToGroup}><i className="fa fa-lock" aria-hidden="true"> Group</i></button>
                     </center>
                 </div>
                 <div>

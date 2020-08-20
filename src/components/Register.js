@@ -1,36 +1,28 @@
 import React, { Component } from "react";
 import './Authors.css';
 
+
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groups: [],
             id: '',
             username:'',
             firstname: '',
             lastname: '',
             email: '',
-            password:''
+            password:'',
+            ListGroups:[],
+            groups: 1,
         }
     }
 
-    // componentWillReceiveProps = (nextProps) =>{
-    //     if(nextProps.groups !== this.state.groups){
-    //         this.setState({
-    //             groups: nextProps.groups,
-    //         });
-    //     }
-    // }
-
-    // onGetGroups = () =>{
-    //     this.props.onGetGroup();
-       
-    // }
-
-    // componentDidMount =() =>{
-    //     this.onGetGroups();
-    // }
+    componentDidMount = async () =>{
+        const ListGroups = await this.props.groups;
+        this.setState({
+            ListGroups
+        });
+    }
 
     checkvalidmail(email){
         var check, position, count;
@@ -62,11 +54,16 @@ class Register extends Component {
         });
     }
 
+    handleChange = (e) => {
+        this.setState({ groups: e.target.value })
+    }
+
     onCreateUser = (event) =>{
-        console.log('asdasddasdas')
         event.preventDefault();
         if(this.handleValidation()){
-            this.props.onCUser(this.state);
+            const data = this.state;
+            data.groups = [this.state.groups];
+            this.props.onCUser(data);
          }
          else{
              if(this.state.email===''||this.state.username === ''|| this.state.password==='')
@@ -80,6 +77,11 @@ class Register extends Component {
     }
 
     render() {
+
+        let options = this.state.ListGroups.map((group) => {
+            return { value: group.id, label: group.id };
+          })
+
         return (
             <div className="white-text add-author">
                 <form onSubmit={this.onCreateUser}>
@@ -115,16 +117,14 @@ class Register extends Component {
                                     onChange={this.onChange} />
                             </div>
                         </div>
-                        {/* <div className="form-group row">
+                        <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Group:</label>
                             <div className="col-sm-9">
-                                <select id="perm" className="form-control">
-                                {this.state.groups.map((group, index) =>(
-                                    <option value="permUser"  key ={index}>{group.name}</option>
-                                    ))} 
+                                <select id="perm" className="form-control" onChange={this.handleChange}>
+                                {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
                                 </select>                           
                             </div>
-                        </div>  */}
+                        </div> 
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Password:</label>
                             <div className="col-sm-9">
